@@ -7,12 +7,12 @@ interface ToastProgressBarProps {
 export const ToastProgressBar = component$(
   ({ progress }: ToastProgressBarProps) => {
     return (
-      <div class="w-full rounded-b-lg h-1.5 bg-base-100 border-base-200 ">
+      <div class="h-1.5 w-full rounded-b-lg border-base-200 bg-base-100 ">
         <div
-          class="h-1.5 rounded-b-lg animate-progress-slide bg-base-200 border-base-200 "
+          class="h-1.5 animate-progress-slide rounded-b-lg border-base-200 bg-base-200 "
           style={`--bar-duration:${progress}ms`}
         ></div>
       </div>
     );
-  }
+  },
 );

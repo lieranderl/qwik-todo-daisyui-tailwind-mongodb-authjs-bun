@@ -5,7 +5,7 @@ export const TestContent = component$(() => {
   const toastManager = useContext(toastManagerContext);
   const addToast = $(() => {
     toastManager.addToast({
-      message: `Error TEST sjhsjhdfgjhsdgh fjhsdgjhfgsdjhfgjsdgfjs dgfjhsdgfjsdgjfsdg fsdjhfg jsdhfg jsdh`,
+      message: `Error TEST sjhsjhdfgjhsdgh fjhsdgjhfgsdjhfgjsdgfjs fsdjhfg jsdhfg jsdh`,
       type: "error",
       autocloseTime: 20000,
     });

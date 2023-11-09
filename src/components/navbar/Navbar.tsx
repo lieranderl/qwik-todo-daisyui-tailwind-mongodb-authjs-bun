@@ -44,12 +44,12 @@ export const Navbar = component$(() => {
             </div>
           </div>
         </div>
-        
+
         <div class="container mx-auto pt-2">
           <Slot />
         </div>
       </div>
-      
+
       <div class="drawer-side z-20">
         <label
           for="my-drawer-3"
@@ -63,7 +63,6 @@ export const Navbar = component$(() => {
           <SideMenu />
         </aside>
       </div>
-
     </div>
   );
 });

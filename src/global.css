@@ -40,7 +40,6 @@ body {
   line-height: inherit;
 }
 
-
 .btn {
-  @apply border-2 normal-case rounded-md;
+  @apply rounded-md border-2 normal-case;
 }

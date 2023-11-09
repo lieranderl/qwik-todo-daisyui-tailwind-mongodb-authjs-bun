@@ -1,7 +1,6 @@
 import type { ToastType } from "./toast";
 import { $ } from "@builder.io/qwik";
 
-
 export const getIconByType = $((type: ToastType) => {
   switch (type) {
     case "success":

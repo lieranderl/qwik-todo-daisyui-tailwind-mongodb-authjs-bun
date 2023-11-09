@@ -32,7 +32,7 @@ export const ToastStack = component$(() => {
     }),
     removeToast: $((id: string) => {
       toastsStore.toasts = toastsStore.toasts.filter(
-        (toast) => toast.id !== id
+        (toast) => toast.id !== id,
       );
     }),
   });
@@ -41,7 +41,7 @@ export const ToastStack = component$(() => {
 
   return (
     <>
-      <div class="z-[1000] fixed bottom-4 right-4 md:w-80 w-72">
+      <div class="fixed bottom-4 right-4 z-[1000] w-72 md:w-80">
         {toastsStore.toasts.map((toast) => (
           <Toast key={toast.id} {...toast} />
         ))}

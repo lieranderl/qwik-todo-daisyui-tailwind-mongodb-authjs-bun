@@ -52,5 +52,5 @@ export const Toast = component$(
         {autocloseTime && <ToastProgressBar progress={autocloseTime} />}
       </div>
     );
-  }
+  },
 );
