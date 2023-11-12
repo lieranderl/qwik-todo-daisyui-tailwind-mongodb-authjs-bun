@@ -4,8 +4,10 @@ import { CiscoIcon } from "./CiscoIcon";
 export const TitleOnToolBar = component$(() => {
   return (
     <>
-      <CiscoIcon />
-      <div class="mx-2 flex-none px-2">Something</div>
+      <div class="flex flex-1">
+        <CiscoIcon />
+        <div class="mx-2 flex-none px-2">Something</div>
+      </div>
     </>
   );
 });
