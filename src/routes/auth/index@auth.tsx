@@ -1,49 +1,20 @@
-import { component$, $, useSignal } from "@builder.io/qwik";
-import { SiGithub, SiGoogle } from "@qwikest/icons/simpleicons";
-import { useAuthSignin } from "~/routes/plugin@auth";
-
+import { component$ } from "@builder.io/qwik";
+import { LoginButtons } from "../../components/auth-page/LoginButtons";
 
 export default component$(() => {
-  const signIn = useAuthSignin();
-  const isLoading = useSignal(false);
   return (
-    <div class="flex items-center justify-center mx-auto h-[calc(100vh-400px)]">
-      <div class="text-center md:space-y-20 space-y-10 grid justify-items-center">
-        <p class="md:text-4xl font-bold text-2xl">
-          Welcome! Please login.
-        </p>
-        <div class="w-fit flex flex-col items-start gap-y-2">
-         <button class="btn btn-primary btn-sm"
-            
-            onClick$={$(() => {
-              isLoading.value = true;
-              signIn.submit({
-                providerId: "google",
-                options: { callbackUrl: "/" },
-              });
-            })}
-          >
-            <div class="flex gap-2">
-              <SiGoogle></SiGoogle>
-              Login with Google
-            </div>
-          </button>
-          <button class="btn btn-primary btn-sm"
-            
-            onClick$={$(() => {
-              isLoading.value = true;
-              signIn.submit({
-                providerId: "github",
-                options: { callbackUrl: "/" },
-              });
-            })}
-          >
-            <div class="flex gap-2">
-              <SiGithub></SiGithub>
-              Login with GitHub
-            </div>
-          </button>
-         
+    <div
+      class="hero min-h-screen"
+      style="background-image: url(https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg);"
+    >
+      <div class="hero-overlay bg-base-200 bg-opacity-80"></div>
+      <div class="hero-content text-center text-base">
+        <div class="flex max-w-md flex-col items-center">
+          <h1 class="mb-5 text-5xl font-bold">Welcome to TODO</h1>
+          <p class="mb-5">
+           This is a simple TODO app built with Qwik. It uses Authjs with Mongo Atlas for authentication and storage.
+          </p>
+         <LoginButtons/>
         </div>
       </div>
     </div>
