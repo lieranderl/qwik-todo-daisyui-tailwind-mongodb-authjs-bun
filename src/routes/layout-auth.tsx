@@ -1,9 +1,6 @@
 import { component$, Slot } from "@builder.io/qwik";
-import type { JSONValue } from "@builder.io/qwik-city";
 import {
-  routeLoader$,
   type RequestHandler,
-  routeAction$,
 } from "@builder.io/qwik-city";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
@@ -17,30 +14,6 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
   });
 };
 
-// export const useTokenCookies = routeAction$(
-//   async (uid: JSONValue, requestEvent) => {
-//     // This will only run on the server when the user submits the form (or when the action is called programatically)
-//     console.log("useTokenCookies AUTH path");
-//     const u = uid as { uid: string };
-//     if (u.uid) {
-//       requestEvent.cookie.set("uid", u.uid as string, { path: "/" });
-//       return {
-//         success: true,
-//         uid,
-//       };
-//     } else {
-//       requestEvent.cookie.delete("uid", { path: "/" });
-//       return {
-//         success: false,
-//       };
-//     }
-//   }
-// );
-
-// export const useQueryParamsLoader = routeLoader$(async (event) => {
-//   const lang = event.query.get("lang") || "en-US";
-//   return { lang };
-// });
 
 export default component$(() => {
   return (

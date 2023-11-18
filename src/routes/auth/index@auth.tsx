@@ -1,5 +1,5 @@
 import { component$, $, useSignal } from "@builder.io/qwik";
-import { SiGoogle } from "@qwikest/icons/simpleicons";
+import { SiGithub, SiGoogle } from "@qwikest/icons/simpleicons";
 import { useAuthSignin } from "~/routes/plugin@auth";
 
 
@@ -26,6 +26,21 @@ export default component$(() => {
             <div class="flex gap-2">
               <SiGoogle></SiGoogle>
               Login with Google
+            </div>
+          </button>
+          <button class="btn btn-primary btn-sm"
+            
+            onClick$={$(() => {
+              isLoading.value = true;
+              signIn.submit({
+                providerId: "github",
+                options: { callbackUrl: "/" },
+              });
+            })}
+          >
+            <div class="flex gap-2">
+              <SiGithub></SiGithub>
+              Login with GitHub
             </div>
           </button>
          

@@ -25,7 +25,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
           console.log("profile", profile)
           return {
             id: profile.sub,
-            theme: profile.theme,
+            theme: "auto",
             language: profile.language,
             image: profile.picture,
             torrServerList: [],
@@ -46,7 +46,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
             name: profile.name || profile.login,
             email: profile.email,
             image: profile.avatar_url,
-            theme: profile.theme,
+            theme: "auto",
             language: profile.language,
             torrServerList: [],
             selectedTorServer: "",
@@ -56,13 +56,13 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
     ] as Provider[],
     callbacks: {
 
-      // async session({ session, user }) {
-      //   console.log("session", session)
-      //   console.log("userPIZDA", user)
-      //   session.id = user.id
-      //   session.user!.image=user.image
-      //   return session
-      // },
+      async session({ session, user }) {
+        session.id = user.id
+        if (user.theme) {
+          session.theme = user.theme
+        }
+        return session
+      },
       // async session({ session, user }) {
       //   const mongodb = await mongoClientPromise;
       //   const accounts = mongodb.db("testing").collection("accounts");
@@ -132,5 +132,7 @@ declare module "@auth/core/types" {
   interface Session {
     error?: "RefreshAccessTokenError"
     id?: string
+    theme?: string
   }
 }
+

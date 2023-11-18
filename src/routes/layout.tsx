@@ -30,7 +30,11 @@ export const onRequest: RequestHandler = (event) => {
 };
 
 export const useThemeLoader = routeLoader$(async (event) => {
-  if (event.cookie.get("theme")) {
+  const theme = event.query.get("theme");
+  if (theme) {
+    event.cookie.set("theme", theme);
+    return { theme: theme };
+  } else if (event.cookie.get("theme")) {
     return { theme: event.cookie.get("theme")!.value };
   }
   return { theme: "auto" };
