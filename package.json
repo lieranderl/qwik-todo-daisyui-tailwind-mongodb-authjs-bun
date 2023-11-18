@@ -45,6 +45,8 @@
     "sharp"
   ],
   "dependencies": {
+    "@qwikest/icons": "^0.0.13",
+    "typescript-cookie": "^1.0.6",
     "uuidv4": "^6.2.13"
   }
 }
