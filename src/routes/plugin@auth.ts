@@ -22,7 +22,6 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
         clientId: env.get("GOOGLE_ID")!,
         clientSecret: env.get("GOOGLE_SECRET")!,
         profile(profile: GoogleProfile  ) {
-          console.log("profile", profile)
           return {
             id: profile.sub,
             theme: "auto",
@@ -55,7 +54,6 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
       })
     ] as Provider[],
     callbacks: {
-
       async session({ session, user }) {
         session.id = user.id
         if (user.theme) {

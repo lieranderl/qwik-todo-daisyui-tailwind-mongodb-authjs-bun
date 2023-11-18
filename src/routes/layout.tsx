@@ -2,6 +2,7 @@ import type { Session } from "@auth/core/types";
 import { component$, Slot } from "@builder.io/qwik";
 import { routeLoader$, type RequestHandler } from "@builder.io/qwik-city";
 import { Navbar } from "~/components/navbar/Navbar";
+import { useAuthSession } from "./plugin@auth";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -20,22 +21,20 @@ export const onRequest: RequestHandler = (event) => {
     // Max once every 5 seconds, revalidate on the server to get a fresh version of this page
     maxAge: 5,
   }); // disable caching
-
-  const session: Session | null = event.sharedMap.get("session");
-  console.log(session);
-  
+  //auth guard
+  const session: Session | null = event.sharedMap.get("session");  
   if (!session || new Date(session.expires) < new Date() || session.error) {
     throw event.redirect(302, `/auth`);
   }
 };
 
 export const useThemeLoader = routeLoader$(async (event) => {
+  const session = event.sharedMap.get("session");
   const theme = event.query.get("theme");
   if (theme) {
-    event.cookie.set("theme", theme);
     return { theme: theme };
-  } else if (event.cookie.get("theme")) {
-    return { theme: event.cookie.get("theme")!.value };
+  } else if (session && session.theme) {
+    return { theme: session.theme };
   }
   return { theme: "auto" };
 });

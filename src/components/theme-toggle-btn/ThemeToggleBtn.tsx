@@ -22,8 +22,18 @@ export const ThemeToggleBtn = component$<ThemeToggleBtnProps>(({ size }) => {
   const selectedIcon = useSignal(THEME_MODES.AUTO);
   const selectedTheme = useSignal(themeLoader.value.theme);
   const session = useAuthSession();
-  // get theme from themeLoader
-  useTask$(async () => {
+ 
+  const updateThemeDb = server$(async () => {
+    const mongo = await mongoClientPromise;
+    const usersCol = mongo.db("testing").collection("users");
+    await usersCol.updateOne(
+      { _id: new ObjectId(session.value?.id) },
+      { $set: { theme: selectedIcon.value } },
+    );
+  });
+
+   // get theme from themeLoader
+   useTask$(async () => {
     if (themeLoader.value.theme === THEME_MODES.DARK) {
       selectedTheme.value = THEME_MODES.DARK;
       selectedIcon.value = THEME_MODES.DARK;
@@ -35,7 +45,7 @@ export const ThemeToggleBtn = component$<ThemeToggleBtnProps>(({ size }) => {
     }
   });
 
-  //////////////////
+  
   useVisibleTask$(async () => {
     window
       .matchMedia("(prefers-color-scheme: dark)")
@@ -58,39 +68,31 @@ export const ThemeToggleBtn = component$<ThemeToggleBtnProps>(({ size }) => {
     document.documentElement.setAttribute("data-theme", selectedTheme.value);
   });
 
-  const updateThemeDb = server$(async () => { 
-    const mongo = await mongoClientPromise;
-    const usersCol = mongo.db("testing").collection("users");
-    console.log(selectedIcon.value);
-    await usersCol.updateOne(
-      { _id: new ObjectId(session.value?.id) },
-      { $set: { theme: selectedIcon.value } },
-    );
+  // track selectedIcon changes
+  useVisibleTask$(async ({ track }) => {
+    track(() => {
+      selectedIcon.value;
+    });
+    setCookie("theme", selectedIcon.value);
+    updateThemeDb();
   });
 
-
   const toggleTheme = $(async () => {
-    console.log(session)
     if (selectedIcon.value === THEME_MODES.AUTO) {
       selectedTheme.value = THEME_MODES.DARK;
       selectedIcon.value = THEME_MODES.DARK;
-      setCookie("theme", THEME_MODES.DARK);
-      updateThemeDb();
     } else if (selectedIcon.value === THEME_MODES.DARK) {
       selectedTheme.value = THEME_MODES.LIGHT;
       selectedIcon.value = THEME_MODES.LIGHT;
-      setCookie("theme", THEME_MODES.LIGHT);
-      updateThemeDb();
     } else if (selectedIcon.value === THEME_MODES.LIGHT) {
       selectedIcon.value = THEME_MODES.AUTO;
-      setCookie("theme", THEME_MODES.AUTO);
-      updateThemeDb();
       if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
         selectedTheme.value = THEME_MODES.DARK;
       } else {
         selectedTheme.value = THEME_MODES.LIGHT;
       }
     }
+    // updateThemeDb();
   });
 
   return (
