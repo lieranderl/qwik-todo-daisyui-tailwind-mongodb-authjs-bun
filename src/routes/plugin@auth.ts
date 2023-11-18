@@ -1,7 +1,7 @@
 import { serverAuth$ } from "@builder.io/qwik-auth";
 import GitHub from "@auth/core/providers/github";
 import type { Provider } from "@auth/core/providers";
-import mongoClientPromise from "./auth/mongodbinit";
+import mongoClientPromise from "../utils/mongodbinit";
 import type { GoogleProfile } from "@auth/core/providers/google";
 import Google from "@auth/core/providers/google";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";

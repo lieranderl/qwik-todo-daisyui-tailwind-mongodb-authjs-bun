@@ -18,7 +18,7 @@ import { manifest } from "@qwik-client-manifest";
 import Root from "./root";
 
 export default function (opts: RenderToStreamOptions) {
-  // get them from the cookie and set it on the html tag
+  // get them from the query or cookie and set it on the html tag
   if (opts.serverData && opts.serverData.requestHeaders.cookie) {
     if (opts.serverData.url.includes("theme=")) {
       opts.containerAttributes = {

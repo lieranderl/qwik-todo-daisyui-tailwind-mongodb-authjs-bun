@@ -8,7 +8,7 @@ import {
 import { ThemeIconTooltip } from "./ThemeToggleIcons";
 import { useThemeLoader } from "~/routes/layout";
 import { setCookie } from "typescript-cookie";
-import mongoClientPromise from "~/routes/auth/mongodbinit";
+import mongoClientPromise from "~/utils/mongodbinit";
 import { useAuthSession } from "~/routes/plugin@auth";
 import { ObjectId } from "mongodb";
 import { server$ } from "@builder.io/qwik-city";
