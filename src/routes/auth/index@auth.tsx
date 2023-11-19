@@ -28,14 +28,37 @@ export default component$(() => {
     >
       <div class="hero-overlay bg-base-200 bg-opacity-80"></div>
       <div class="hero-content text-center text-base">
-        <div class="flex max-w-lg flex-col items-center">
-          <h1 class="mb-5 text-5xl font-bold">Welcome to TODO</h1>
-          <div class="mb-5 flex flex-col ">
-            <p>This is a simple TODO app built with Qwik.</p>
+        <div class="flex max-w-xl flex-col items-center">
+          <h1 class="mb-5 text-3xl font-bold sm:text-5xl">Welcome to TODO</h1>
+          <div class="mb-5 flex flex-col text-sm sm:text-base">
             <p>
-              It uses Authjs with Mongo Atlas for authentication and storage.
+              <span>This is a simple TODO app built with </span>
+              <span class="font-bold">
+                <a href="https://qwik.builder.io/">Qwik</a>
+              </span>
+              .
             </p>
-            <p>Daisyui with custom themes is used for styling.</p>
+            <p>
+              It uses{" "}
+              <span class="font-bold">
+                <a href="https://authjs.dev/">Authjs</a>
+              </span>{" "}
+              with
+              <span class="font-bold">
+                <a href="https://www.mongodb.com/"> MongoDB Atlas</a>
+              </span>{" "}
+              for authentication and storage.
+            </p>
+            <p>
+              <span class="font-bold">
+                <a href="https://tailwindcss.com/">Tailwindcss</a>
+              </span>{" "}
+              +
+              <span class="font-bold">
+                <a href="https://daisyui.com/"> DaisyUI</a>
+              </span>{" "}
+              with custom light and dark themes are used for styling.
+            </p>
           </div>
           <LoginButtons />
         </div>

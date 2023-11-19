@@ -1,5 +1,6 @@
 import { serverAuth$ } from "@builder.io/qwik-auth";
 import GitHub from "@auth/core/providers/github";
+import Facebook from "@auth/core/providers/facebook";
 import type { Provider } from "@auth/core/providers";
 import mongoClientPromise from "../utils/mongodbinit";
 import type { GoogleProfile } from "@auth/core/providers/google";
@@ -45,6 +46,19 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
             name: profile.name || profile.login,
             email: profile.email,
             image: profile.avatar_url,
+            theme: "auto",
+            language: profile.language,
+            torrServerList: [],
+            selectedTorServer: "",
+          };
+        }
+      }),
+      Facebook({
+        clientId: env.get("FACEBOOK_OAUTH_CLIENT_ID")!,
+        clientSecret: env.get("FACEBOOK_OAUTH_CLIENT_SECRET")!,
+        profile(profile) {
+          return {
+            id: profile.id.toString(),
             theme: "auto",
             language: profile.language,
             torrServerList: [],
