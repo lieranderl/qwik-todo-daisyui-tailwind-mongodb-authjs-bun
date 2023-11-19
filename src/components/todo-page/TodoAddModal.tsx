@@ -1,10 +1,8 @@
-import { component$, $, QRL, useSignal } from "@builder.io/qwik";
+import type { QRL } from "@builder.io/qwik";
+import { component$, $, useSignal } from "@builder.io/qwik";
 import { server$ } from "@builder.io/qwik-city";
-import {
-  SubmitHandler,
-  useForm,
-  valiForm$,
-} from "@modular-forms/qwik";
+import type { SubmitHandler } from "@modular-forms/qwik";
+import { useForm, valiForm$ } from "@modular-forms/qwik";
 import type { Input } from "valibot";
 import { object, string, minLength } from "valibot";
 import { useAuthSession } from "~/routes/plugin@auth";
@@ -12,29 +10,25 @@ import { addTodo } from "~/utils/todomongodb";
 
 const TodoAddSchema = object({
   title: string([minLength(1, "Please enter TODO title.")]),
-  email: string(),
 });
 
 type TodoAddForm = Input<typeof TodoAddSchema>;
 
 export const TodoAddModal = component$(() => {
   const session = useAuthSession();
+  const isLoading = useSignal(false);
   const [TodoAddForm, { Form, Field }] = useForm<TodoAddForm>({
     loader: {
       value: {
         title: "",
-        email: session.value?.user?.email ? session.value.user.email : "",
       },
     },
     validate: valiForm$(TodoAddSchema),
   });
 
   const addTodoOnServer = server$(async (values) => {
-    console.log(values);
     await addTodo(values);
   });
-
-  const isLoading = useSignal(false);
 
   const handleSubmit: QRL<SubmitHandler<TodoAddForm>> = $(
     async (values, event) => {
@@ -42,7 +36,11 @@ export const TodoAddModal = component$(() => {
         return;
       }
       isLoading.value = true;
-      await addTodoOnServer(values);
+      const v = {
+        email: session.value?.user?.email,
+        ...values
+      }
+      await addTodoOnServer(v);
       window.location.reload();
     },
   );
@@ -67,14 +65,6 @@ export const TodoAddModal = component$(() => {
                   type="text"
                   value={field.value}
                 />
-                {field.error && <div>{field.error}</div>}
-              </div>
-            )}
-          </Field>
-          <Field name="email" type="string">
-            {(field, props) => (
-              <div hidden>
-                <input {...props} type="text" value={field.value} />
                 {field.error && <div>{field.error}</div>}
               </div>
             )}

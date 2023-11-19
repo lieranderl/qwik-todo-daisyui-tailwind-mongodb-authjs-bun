@@ -1,9 +1,11 @@
+import type { QRL } from "@builder.io/qwik";
 import { component$, $, useSignal } from "@builder.io/qwik";
-import { formAction$, useForm, valiForm$ } from "@modular-forms/qwik";
+import type { SubmitHandler } from "@modular-forms/qwik";
+import { getValue, useForm, valiForm$ } from "@modular-forms/qwik";
 import type { Todo } from "~/models/todo";
 import { type Input, minLength, object, string, boolean } from "valibot";
 import { deleteTodo, updateTodo } from "~/utils/todomongodb";
-import { server$, useNavigate } from "@builder.io/qwik-city";
+import { server$ } from "@builder.io/qwik-city";
 
 type TodoCardProps = {
   todo: Todo;
@@ -11,29 +13,14 @@ type TodoCardProps = {
 const TodoUpdateSchema = object({
   title: string([minLength(1, "Please enter TODO title.")]),
   completed: boolean(),
-  id: string(),
 });
 type TodoForm = Input<typeof TodoUpdateSchema>;
 
-export const useFormAction = formAction$<TodoForm>(async (values) => {
-  // Runs on server
-  // console.log("Saving todo", values);
-  updateTodo({
-    id: values.id,
-    todo: {
-      title: values.title,
-      completed: values.completed,
-    },
-  });
-}, valiForm$(TodoUpdateSchema));
-
 export const TodoCard = component$<TodoCardProps>(({ todo }) => {
-  const nav = useNavigate();
   const [TodoForm, { Form, Field }] = useForm<TodoForm>({
     loader: {
-      value: { title: todo.title, completed: todo.completed, id: todo.id },
+      value: { title: todo.title, completed: todo.completed },
     },
-    action: useFormAction(),
     validate: valiForm$(TodoUpdateSchema),
   });
 
@@ -43,16 +30,33 @@ export const TodoCard = component$<TodoCardProps>(({ todo }) => {
     });
   });
 
-  const isLoading = useSignal(false);
+  const isLoadingDelete = useSignal(false);
+  const isLoadingUpdate = useSignal(false);
+  const disabledSavebutton = useSignal(true);
 
-  const disabledbutton = useSignal(" btn-disabled");
-
-  const submitHandler = $(() => {
-    disabledbutton.value = " btn-disabled";
+  const updateTodoOnServer = server$(async (values) => {
+    await updateTodo({
+      id: todo.id,
+      todo: {
+        title: values.title,
+        completed: values.completed,
+      },
+    });
   });
 
+  const submitHandler: QRL<SubmitHandler<TodoForm>> = $(
+    async (values, event) => {
+      if (TodoForm.invalid) {
+        return;
+      }
+      isLoadingUpdate.value = true;
+      await updateTodoOnServer(values);
+      window.location.reload();
+    },
+  );
+
   const handleInputChange = $(async () => {
-    disabledbutton.value = "";
+    disabledSavebutton.value = false;
   });
 
   return (
@@ -64,7 +68,11 @@ export const TodoCard = component$<TodoCardProps>(({ todo }) => {
               <div>
                 <input
                   {...props}
-                  class="input card-title"
+                  class={
+                    getValue(TodoForm, "completed")
+                      ? "input card-title line-through"
+                      : "input card-title"
+                  }
                   placeholder="Type TODO title here"
                   type="text"
                   value={field.value}
@@ -96,27 +104,36 @@ export const TodoCard = component$<TodoCardProps>(({ todo }) => {
               </Field>
             </label>
           </div>
-          <Field name="id" type="string">
-            {(field, props) => (
-              <input {...props} type="hidden" value={field.value} />
-            )}
-          </Field>
 
           <div class="card-actions justify-end">
-            <button
-              class={
-                "btn btn-outline btn-primary btn-sm" + disabledbutton.value
-              }
-              type="submit"
-            >
-              Save
-            </button>
-            {!isLoading.value && (
+            {!isLoadingUpdate.value && (
+              <button
+                class={
+                  disabledSavebutton.value
+                    ? "btn btn-disabled btn-outline btn-primary btn-sm"
+                    : "btn btn-outline btn-primary btn-sm"
+                }
+                type="submit"
+              >
+                Save
+              </button>
+            )}
+            {isLoadingUpdate.value && (
+              <button
+                class="btn btn-disabled btn-outline btn-primary btn-sm"
+                type="submit"
+              >
+                <span class="loading loading-spinner loading-sm"></span>
+                Saving...
+              </button>
+            )}
+
+            {!isLoadingDelete.value && (
               <button
                 class="btn btn-outline btn-error btn-sm"
                 type="button"
                 onClick$={async () => {
-                  isLoading.value = true;
+                  isLoadingDelete.value = true;
                   await deleleHandler();
                   window.location.reload();
                 }}
@@ -124,7 +141,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo }) => {
                 Delete
               </button>
             )}
-            {isLoading.value && (
+            {isLoadingDelete.value && (
               <button
                 class="btn btn-disabled btn-outline btn-error btn-sm"
                 type="button"
