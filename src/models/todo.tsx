@@ -3,7 +3,8 @@ export type TodoList = Todo[];
 
 export type TodoBody = {
     title: string;
-    completed: boolean;
+    completed?: boolean;
+    email: string;
 };
 
 export type TodoId  = {

@@ -3,7 +3,7 @@ import { formAction$, useForm, valiForm$ } from "@modular-forms/qwik";
 import type { Todo } from "~/models/todo";
 import { type Input, minLength, object, string, boolean } from "valibot";
 import { deleteTodo, updateTodo } from "~/utils/todomongodb";
-import { server$ } from "@builder.io/qwik-city";
+import { server$, useNavigate } from "@builder.io/qwik-city";
 
 type TodoCardProps = {
   todo: Todo;
@@ -17,7 +17,7 @@ type TodoForm = Input<typeof TodoUpdateSchema>;
 
 export const useFormAction = formAction$<TodoForm>(async (values) => {
   // Runs on server
-  console.log("Saving todo", values);
+  // console.log("Saving todo", values);
   updateTodo({
     id: values.id,
     todo: {
@@ -28,6 +28,7 @@ export const useFormAction = formAction$<TodoForm>(async (values) => {
 }, valiForm$(TodoUpdateSchema));
 
 export const TodoCard = component$<TodoCardProps>(({ todo }) => {
+  const nav = useNavigate();
   const [TodoForm, { Form, Field }] = useForm<TodoForm>({
     loader: {
       value: { title: todo.title, completed: todo.completed, id: todo.id },
@@ -36,11 +37,13 @@ export const TodoCard = component$<TodoCardProps>(({ todo }) => {
     validate: valiForm$(TodoUpdateSchema),
   });
 
-  const deleleHandler = server$(() => {
-    deleteTodo({
+  const deleleHandler = server$(async () => {
+    await deleteTodo({
       id: todo.id,
     });
   });
+
+  const isLoading = useSignal(false);
 
   const disabledbutton = useSignal(" btn-disabled");
 
@@ -71,10 +74,12 @@ export const TodoCard = component$<TodoCardProps>(({ todo }) => {
               </div>
             )}
           </Field>
-          <div class="flex flex-col py-4 text-right text-sm">
-            <span>Created: {todo.createdAt.toLocaleString("en-GB")}</span>
-            <span>Updated: {todo.updatedAt.toLocaleString("en-GB")}</span>
-          </div>
+          {todo.createdAt && (
+            <div class="flex flex-col py-4 text-right text-sm">
+              <span>Created: {todo.createdAt.toLocaleString("en-GB")}</span>
+              <span>Updated: {todo.updatedAt.toLocaleString("en-GB")}</span>
+            </div>
+          )}
           <div class="flex justify-end py-2">
             <label class="label w-fit cursor-pointer">
               <span class="label-text mx-4">Completed</span>
@@ -106,13 +111,28 @@ export const TodoCard = component$<TodoCardProps>(({ todo }) => {
             >
               Save
             </button>
-            <button
-              class="btn btn-outline btn-error btn-sm"
-              type="button"
-              onClick$={deleleHandler}
-            >
-              Delete
-            </button>
+            {!isLoading.value && (
+              <button
+                class="btn btn-outline btn-error btn-sm"
+                type="button"
+                onClick$={async () => {
+                  isLoading.value = true;
+                  await deleleHandler();
+                  window.location.reload();
+                }}
+              >
+                Delete
+              </button>
+            )}
+            {isLoading.value && (
+              <button
+                class="btn btn-disabled btn-outline btn-error btn-sm"
+                type="button"
+              >
+                <span class="loading loading-spinner loading-sm"></span>
+                Deleting...
+              </button>
+            )}
           </div>
         </Form>
       </div>

@@ -2,6 +2,7 @@ import type { Session } from "@auth/core/types";
 import { component$, Slot } from "@builder.io/qwik";
 import { routeLoader$, type RequestHandler } from "@builder.io/qwik-city";
 import { Navbar } from "~/components/navbar/Navbar";
+import { useAuthSession } from "./plugin@auth";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:

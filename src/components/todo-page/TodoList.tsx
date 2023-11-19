@@ -1,6 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { useTodoListLoader } from "~/routes";
 import { TodoCard } from "./TodoCard";
+import { TodoAddModal } from "./TodoAddModal";
 
 export const TodoList = component$(() => {
   const todoList = useTodoListLoader();
@@ -11,6 +12,7 @@ export const TodoList = component$(() => {
           return <TodoCard todo={todo} key={i} />;
         })}
       </div>
+      <TodoAddModal />
     </>
   );
 });
