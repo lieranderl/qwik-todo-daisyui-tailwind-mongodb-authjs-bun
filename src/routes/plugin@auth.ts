@@ -25,11 +25,9 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
         profile(profile: GoogleProfile  ) {
           return {
             id: profile.sub,
-            theme: "auto",
+            theme: "auto", // custom attribute
             language: profile.language,
             image: profile.picture,
-            torrServerList: [],
-            selectedTorServer: "",
             emailVerified: profile.email_verified,
             ...profile,
           };
@@ -46,10 +44,8 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
             name: profile.name || profile.login,
             email: profile.email,
             image: profile.avatar_url,
-            theme: "auto",
+            theme: "auto", // custom attribute
             language: profile.language,
-            torrServerList: [],
-            selectedTorServer: "",
           };
         }
       }),
@@ -59,10 +55,8 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
         profile(profile) {
           return {
             id: profile.id.toString(),
-            theme: "auto",
+            theme: "auto", // custom attribute
             language: profile.language,
-            torrServerList: [],
-            selectedTorServer: "",
           };
         }
       })
