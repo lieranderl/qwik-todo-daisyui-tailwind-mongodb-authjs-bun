@@ -5,18 +5,16 @@ import { getTodoList } from "~/utils/todomongodb";
 
 export const useTodoListLoader = routeLoader$(async (event) => {
   const session = event.sharedMap.get("session");
-  // console.log(session);
   if (session && session.user && session.user.email) {
-    return await getTodoList({email: session.user.email});
-  } 
-  return []
-  
-})
+    return await getTodoList({ email: session.user.email });
+  }
+  return [];
+});
 
 export default component$(() => {
   return (
     <>
-        <TodoList />
+      <TodoList />
     </>
   );
 });

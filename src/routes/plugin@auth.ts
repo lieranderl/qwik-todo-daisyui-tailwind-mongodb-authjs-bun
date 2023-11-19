@@ -22,7 +22,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
       Google({
         clientId: env.get("GOOGLE_ID")!,
         clientSecret: env.get("GOOGLE_SECRET")!,
-        profile(profile: GoogleProfile  ) {
+        profile(profile: GoogleProfile) {
           return {
             id: profile.sub,
             theme: "auto", // custom attribute
@@ -69,62 +69,13 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
         }
         return session
       },
-      // async session({ session, user }) {
-      //   const mongodb = await mongoClientPromise;
-      //   const accounts = mongodb.db("testing").collection("accounts");
-      //   const userId = new ObjectId(user.id);
-      //   const cursor = accounts.find({ userId: userId, provider: "google" })
-      //   console.log("cursor")
-      //   for await (const google of cursor) {
-      //     console.log("cursor!!!!!")
-      //     if (google.expires_at * 1000 < Date.now()) {
-      //       // If the access token has expired, try to refresh it
-      //       try {
-      //         // https://accounts.google.com/.well-known/openid-configuration
-      //         // We need the `token_endpoint`.
-      //         console.log("response", process.env.GOOGLE_ID!)
-      //         const response = await fetch("https://oauth2.googleapis.com/token", {
-      //           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      //           body: new URLSearchParams({
-      //             client_id: process.env.GOOGLE_ID!,
-      //             client_secret: process.env.GOOGLE_SECRET!,
-      //             grant_type: "refresh_token",
-      //             refresh_token: google.refresh_token,
-      //           }),
-      //           method: "POST",
-      //         })
-      //         console.log("response", response)
-      //         const tokens: TokenSet = await response.json()
-
-      //         if (!response.ok) throw tokens
-
-      //         await accounts.updateOne(
-      //           {
-      //             _id: google._id,
-      //           },
-      //           {
-      //             access_token: tokens.access_token,
-      //             expires_at: Math.floor(Date.now() / 1000 + tokens.expires_in!),
-      //             refresh_token: tokens.refresh_token ?? google.refresh_token,
-      //           },
-
-      //         )
-      //       } catch (error) {
-      //         console.error("Error refreshing access token", error)
-      //         // The error property will be used client-side to handle the refresh token error
-      //         session.error = "RefreshAccessTokenError"
-      //       }
-      //     }
-      //   }
-      //   return session
-      // },
       async signIn({ account, profile }) {
         if (account && profile) {
           if (account.provider === "google") {
             const p = profile as GoogleProfile;
             return p.email_verified && p.email.endsWith("@gmail.com")
           }
-          if (account.provider === "github") {            
+          if (account.provider === "github") {
             return true
           }
         }
