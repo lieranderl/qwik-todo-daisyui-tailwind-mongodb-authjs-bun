@@ -4,7 +4,6 @@ export type TodoList = Todo[];
 export type TodoBody = {
     title: string;
     completed: boolean;
-    email: string;
 };
 
 export type TodoId  = {
@@ -20,7 +19,7 @@ export type Todo = TodoId & TodoBody & TodoTimestamps;
 
 export type TodoBodyRecordProps = {
     todo: TodoBody;
-    email: string;
+    id: string;
 };
 
 export type TodoListBodyRecordProps = {
