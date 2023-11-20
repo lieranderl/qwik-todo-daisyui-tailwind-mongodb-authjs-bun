@@ -8,7 +8,7 @@ export const AvatarMenu = component$(() => {
     <>
       {session.value && session.value.user && (
         <div class="dropdown dropdown-end">
-          <label tabindex="0" class="avatar btn btn-circle btn-ghost">
+          <label tabIndex={0} class="avatar btn btn-circle btn-ghost">
             {session.value.user.image && (
               <div class="w-10 rounded-full">
                 <img width="844" height="844" src={session.value.user.image} />
@@ -16,7 +16,7 @@ export const AvatarMenu = component$(() => {
             )}
           </label>
           <ul
-            tabindex="0"
+            tabIndex={0}
             class="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
           >
             <li>

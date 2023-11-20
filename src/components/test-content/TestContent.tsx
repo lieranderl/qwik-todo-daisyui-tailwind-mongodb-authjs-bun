@@ -69,11 +69,11 @@ export const TestContent = component$(() => {
             Toast
           </button>
           <div class="dropdown">
-            <label tabindex="0" class="btn btn-primary btn-sm mx-1">
+            <label tabIndex={0} class="btn btn-primary btn-sm mx-1">
               Dropdown
             </label>
             <ul
-              tabindex="0"
+              tabIndex={0}
               class="menu dropdown-content rounded-box z-[1] w-52 bg-base-100 p-2 shadow"
             >
               <li>
