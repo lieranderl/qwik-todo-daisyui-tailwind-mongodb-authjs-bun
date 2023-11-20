@@ -37,7 +37,7 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
   });
 
   const handleAddTodoSubmit: QRL<SubmitHandler<TodoAddForm>> = $(
-    async (values, event) => {
+    async (values) => {
       if (TodoAddForm.invalid) {
         return;
       }

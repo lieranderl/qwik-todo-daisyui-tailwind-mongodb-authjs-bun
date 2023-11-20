@@ -18,7 +18,7 @@ export const TodoList = component$(() => {
     return await getTodoList({ email: email });
   });
 
-  const resource = useResource$(async ({ track, cleanup }) => {
+  const resource = useResource$(async ({ track }) => {
     track(() => refreshEvent.value);
 
     if (!session.value?.user?.email) {

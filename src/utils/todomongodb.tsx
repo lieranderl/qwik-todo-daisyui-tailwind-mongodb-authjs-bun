@@ -9,11 +9,6 @@ import type {
 import { todosCol } from "./mongodbinit";
 import { ObjectId } from "mongodb";
 
-type AbortControllerProps = {
-  signal: AbortSignal;
-};
-
-
 export const addTodo = async (todo: TodoBody) => {
   todo.completed = false;
   const fullTodo = {
@@ -52,7 +47,7 @@ export const getTodoList = async ({ email }: TodoListBodyRecordProps) => {
   const todoList: TodoList = [];
   for await (const todo of cursor) {
     const { _id, ...mytodo } = todo;
-    mytodo.id = todo._id.toString();
+    mytodo.id = _id.toString();
     todoList.push(mytodo as Todo);
   }
   return todoList;

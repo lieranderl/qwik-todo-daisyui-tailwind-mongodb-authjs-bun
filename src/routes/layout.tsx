@@ -2,7 +2,6 @@ import type { Session } from "@auth/core/types";
 import { component$, Slot } from "@builder.io/qwik";
 import { routeLoader$, type RequestHandler } from "@builder.io/qwik-city";
 import { Navbar } from "~/components/navbar/Navbar";
-import { useAuthSession } from "./plugin@auth";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -21,7 +20,7 @@ export const onRequest: RequestHandler = (event) => {
     // Max once every 5 seconds, revalidate on the server to get a fresh version of this page
     maxAge: 5,
   }); // disable caching
-  //auth guard
+  //auth guard  
   const session: Session | null = event.sharedMap.get("session");  
   if (!session || new Date(session.expires) < new Date() || session.error) {
     throw event.redirect(302, `/auth`);

@@ -42,7 +42,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
   });
 
   const submitHandlerUpdate: QRL<SubmitHandler<TodoForm>> = $(
-    async (values, event) => {
+    async (values) => {
       if (TodoForm.invalid) {
         return;
       }
@@ -106,8 +106,8 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
                   {...props}
                   class={
                     getValue(TodoForm, "completed")
-                      ? "input card-title line-through"
-                      : "input card-title"
+                      ? "input card-title w-full line-through"
+                      : "input card-title w-full"
                   }
                   placeholder="Type TODO title here"
                   type="text"
@@ -118,13 +118,24 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
               </div>
             )}
           </Field>
-          {todo.createdAt && (
-            <div class="flex flex-col py-4 text-right text-sm">
-              <span>Created: {todo.createdAt.toLocaleString("en-GB")}</span>
-              <span>Updated: {todo.updatedAt.toLocaleString("en-GB")}</span>
-            </div>
-          )}
-          <div class="flex justify-end py-2">
+          <div class="divider"></div>
+          <div class="flex items-center justify-between py-2">
+            {todo.createdAt && (
+              <div>
+                <div class="flex items-center justify-end text-sm">
+                  <span class="px-1">Updated:</span>
+                  <span class="badge badge-sm">
+                    {todo.updatedAt.toLocaleString("en-GB")}
+                  </span>
+                </div>
+                <div class="flex items-center justify-end text-sm">
+                  <span class="px-1">Created:</span>
+                  <span class="badge badge-sm">
+                    {todo.createdAt.toLocaleString("en-GB")}
+                  </span>
+                </div>
+              </div>
+            )}
             <label class="label w-fit cursor-pointer">
               <span class="label-text mx-4">Completed</span>
               <Field name="completed" type="boolean">

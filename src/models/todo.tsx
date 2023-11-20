@@ -4,7 +4,7 @@ export type TodoList = Todo[];
 export type TodoBody = {
     title: string;
     completed?: boolean;
-    email: string;
+    email?: string;
 };
 
 export type TodoId  = {

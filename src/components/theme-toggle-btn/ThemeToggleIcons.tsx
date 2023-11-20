@@ -3,7 +3,7 @@ import { HiSunOutline, HiMoonOutline } from "@qwikest/icons/heroicons";
 const ThemeIconDark = component$(() => {
   return (
     <HiMoonOutline></HiMoonOutline>
-    
+
     // <svg
     //   class="fill-current"
     //   xmlns="http://www.w3.org/2000/svg"
@@ -44,54 +44,65 @@ interface SelectorProps {
 }
 
 const ThemeIcon = component$<SelectorProps>(({ selector, size }) => {
-  const classIconSig = useSignal("text-3xl animate-rotate45",
-  );
+  const classIconSig = useSignal("text-3xl animate-rotate45");
+
   useTask$(() => {
-    if (size === "xs") {
-      classIconSig.value = "text-xl animate-rotate45";
-    }
-    if (size === "sm") {
-      classIconSig.value = "text-2xl animate-rotate45";
-    }
-    if (size === "lg") {
-      classIconSig.value = "text-4xl animate-rotate45";
+    switch (size) {
+      case "xs":
+        classIconSig.value = "text-xl animate-rotate45";
+        break;
+      case "sm":
+        classIconSig.value = "text-2xl animate-rotate45";
+        break;
+      case "lg":
+        classIconSig.value = "text-4xl animate-rotate45";
+        break;
+      default:
+        classIconSig.value = "text-3xl animate-rotate45";
+        break;
     }
   });
-  if (selector === "auto")
-    return (
-      <div class={classIconSig.value}>
-        <ThemeIconAuto />
-      </div>
-    );
-  if (selector === "light")
-    return (
-      <div class={classIconSig.value}>
-        <ThemeIconLight />
-      </div>
-    );
-  if (selector === "dark")
-    return (
-      <div class={classIconSig.value}>
-        <ThemeIconDark />
-      </div>
-    );
-  return <ThemeIconAuto />;
+
+  switch (selector) {
+    case "light":
+      return (
+        <div class={classIconSig.value}>
+          <ThemeIconLight />
+        </div>
+      );
+    case "dark":
+      return (
+        <div class={classIconSig.value}>
+          <ThemeIconDark />
+        </div>
+      );
+    default:
+      return (
+        <div class={classIconSig.value}>
+          <ThemeIconAuto />
+        </div>
+      );
+  }
 });
 
 export const ThemeIconTooltip = component$<SelectorProps>(
   ({ selector, size }) => {
-    const classIconSig = useSignal(
-      "tooltip tooltip-bottom btn btn-ghost p-1 w-12",
-    );
+    const baseClass = "tooltip tooltip-bottom btn btn-ghost p-1 font-normal ";
+    const classIconSig = useSignal(baseClass + "w-12");
     useTask$(() => {
-      if (size === "xs") {
-        classIconSig.value = "tooltip tooltip-bottom btn btn-ghost p-1 w-8";
-      }
-      if (size === "sm") {
-        classIconSig.value = "tooltip tooltip-bottom btn btn-ghost p-1 w-10";
-      }
-      if (size === "lg") {
-        classIconSig.value = "tooltip tooltip-bottom btn btn-ghost p-1 w-14";
+      switch (size) {
+        case "xs":
+          classIconSig.value = baseClass + "w-8";
+          break;
+        case "sm":
+          classIconSig.value = baseClass + "w-10";
+          break;
+        case "lg":
+          classIconSig.value = baseClass + "w-14";
+          break;
+        default:
+          classIconSig.value = baseClass + "w-12";
+          break;
       }
     });
     return (

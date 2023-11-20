@@ -23,7 +23,7 @@ export default function (opts: RenderToStreamOptions) {
     if (opts.serverData.url.includes("theme=")) {
       opts.containerAttributes = {
         ...opts.containerAttributes,
-        "data-theme": opts.serverData.url.split("theme=")[1],
+        "data-theme": opts.serverData.url.split("theme=")[1].split("&")[0],
       };
     } else {
       opts.serverData.requestHeaders.cookie
@@ -32,7 +32,7 @@ export default function (opts: RenderToStreamOptions) {
           if (cookie.includes("theme=")) {
             opts.containerAttributes = {
               ...opts.containerAttributes,
-              "data-theme": cookie.split("theme=")[1],
+              "data-theme": cookie.split("theme=")[1].split(";")[0],
             };
           }
         });

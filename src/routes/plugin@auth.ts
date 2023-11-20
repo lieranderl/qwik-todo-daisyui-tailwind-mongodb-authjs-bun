@@ -63,6 +63,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
     ] as Provider[],
     callbacks: {
       async session({ session, user }) {
+        // console.log("session:", session, user)
         session.id = user.id
         if (user.theme) {
           session.theme = user.theme
@@ -93,3 +94,8 @@ declare module "@auth/core/types" {
   }
 }
 
+declare module "@auth/core/adapters" {
+  interface AdapterUser {
+    theme?: string
+  }
+}
