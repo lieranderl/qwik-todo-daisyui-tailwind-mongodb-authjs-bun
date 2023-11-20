@@ -9,7 +9,7 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 
 
 export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
-  serverAuth$(({ env }) => ({
+  serverAuth$(() => ({
     session: {
       strategy: "database",
       maxAge: 60 * 60 * 24 * 7, // 1 week
