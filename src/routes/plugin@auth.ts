@@ -16,12 +16,12 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
       updateAge: 60 * 60 * 24, // 1 day
     },
     adapter: MongoDBAdapter(mongoClientPromise, { databaseName: "testing" }),
-    secret: env.get("AUTH_SECRET"),
+    secret: process.env.AUTH_SECRET,
     trustHost: true,
     providers: [
       Google({
-        clientId: env.get("GOOGLE_ID")!,
-        clientSecret: env.get("GOOGLE_SECRET")!,
+        clientId: process.env.GOOGLE_ID,
+        clientSecret: process.env.GOOGLE_SECRET,
         profile(profile: GoogleProfile) {
           return {
             id: profile.sub,
@@ -35,8 +35,8 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
       }
       ),
       GitHub({
-        clientId: env.get("GITHUB_OAUTH_CLIENT_ID")!,
-        clientSecret: env.get("GITHUB_OAUTH_CLIENT_SECRET")!,
+        clientId: process.env.GITHUB_OAUTH_CLIENT_ID,
+        clientSecret: process.env.GITHUB_OAUTH_CLIENT_SECRET,
         profile(profile) {
           return {
             gh_username: profile.login,
@@ -50,8 +50,8 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
         }
       }),
       Facebook({
-        clientId: env.get("FACEBOOK_OAUTH_CLIENT_ID")!,
-        clientSecret: env.get("FACEBOOK_OAUTH_CLIENT_SECRET")!,
+        clientId: process.env.FACEBOOK_OAUTH_CLIENT_ID,
+        clientSecret: process.env.FACEBOOK_OAUTH_CLIENT_SECRET,
         profile(profile) {
           return {
             id: profile.id.toString(),

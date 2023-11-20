@@ -1,5 +1,5 @@
 import { component$, useVisibleTask$ } from "@builder.io/qwik";
-import { LoginButtons } from "../../components/auth-page/LoginButtons";
+import { LoginButtons } from "../../components/page-quth/LoginButtons";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 
 export const useCheckSession = routeLoader$(async (event) => {

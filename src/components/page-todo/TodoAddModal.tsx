@@ -1,8 +1,8 @@
 import type { QRL, Signal } from "@builder.io/qwik";
-import { component$, $, useSignal, useContext } from "@builder.io/qwik";
+import { component$, $, useSignal, useContext, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 import { server$ } from "@builder.io/qwik-city";
 import type { SubmitHandler } from "@modular-forms/qwik";
-import { useForm, valiForm$ } from "@modular-forms/qwik";
+import { useForm, valiForm$, focus } from "@modular-forms/qwik";
 import type { Input } from "valibot";
 import { object, string, minLength } from "valibot";
 import { useAuthSession } from "~/routes/plugin@auth";
@@ -64,6 +64,7 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
     },
   );
 
+
   return (
     <dialog id="addtodo_modal" class="modal">
       <div class="modal-box">
@@ -79,6 +80,7 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
               <div>
                 <input
                   {...props}
+                  autoFocus 
                   class="input card-title input-bordered w-full"
                   //   placeholder="Type TODO title here"
                   type="text"
