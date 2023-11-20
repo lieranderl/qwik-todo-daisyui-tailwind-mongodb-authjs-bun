@@ -1,5 +1,5 @@
-import type { QRL } from "@builder.io/qwik";
-import { component$, $, useSignal } from "@builder.io/qwik";
+import type { QRL, Signal } from "@builder.io/qwik";
+import { component$, $, useSignal, useContext } from "@builder.io/qwik";
 import { server$ } from "@builder.io/qwik-city";
 import type { SubmitHandler } from "@modular-forms/qwik";
 import { useForm, valiForm$ } from "@modular-forms/qwik";
@@ -7,6 +7,7 @@ import type { Input } from "valibot";
 import { object, string, minLength } from "valibot";
 import { useAuthSession } from "~/routes/plugin@auth";
 import { addTodo } from "~/utils/todomongodb";
+import { toastManagerContext } from "../toast/toastStack";
 
 const TodoAddSchema = object({
   title: string([minLength(1, "Please enter TODO title.")]),
@@ -14,9 +15,14 @@ const TodoAddSchema = object({
 
 type TodoAddForm = Input<typeof TodoAddSchema>;
 
-export const TodoAddModal = component$(() => {
+type TodoAddModalProps = {
+  refresh: Signal<number>;
+};
+
+export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
   const session = useAuthSession();
   const isLoading = useSignal(false);
+  const toastManager = useContext(toastManagerContext);
   const [TodoAddForm, { Form, Field }] = useForm<TodoAddForm>({
     loader: {
       value: {
@@ -30,7 +36,7 @@ export const TodoAddModal = component$(() => {
     await addTodo(values);
   });
 
-  const handleSubmit: QRL<SubmitHandler<TodoAddForm>> = $(
+  const handleAddTodoSubmit: QRL<SubmitHandler<TodoAddForm>> = $(
     async (values, event) => {
       if (TodoAddForm.invalid) {
         return;
@@ -38,10 +44,23 @@ export const TodoAddModal = component$(() => {
       isLoading.value = true;
       const v = {
         email: session.value?.user?.email,
-        ...values
+        ...values,
+      };
+      try {
+        await addTodoOnServer(v);
+        refresh.value += 1;
+        toastManager.addToast({
+          message: "New TODO added",
+          type: "success",
+          autocloseTime: 5000,
+        });
+      } catch (error) {
+        toastManager.addToast({
+          message: "Failed to add TODO",
+          type: "error",
+          autocloseTime: 5000,
+        });
       }
-      await addTodoOnServer(v);
-      window.location.reload();
     },
   );
 
@@ -54,7 +73,7 @@ export const TodoAddModal = component$(() => {
           </button>
         </form>
         <h3 class="pb-4 text-lg font-bold">Add new TODO</h3>
-        <Form onSubmit$={handleSubmit}>
+        <Form onSubmit$={handleAddTodoSubmit}>
           <Field name="title" type="string">
             {(field, props) => (
               <div>

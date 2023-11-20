@@ -9,6 +9,11 @@ import type {
 import { todosCol } from "./mongodbinit";
 import { ObjectId } from "mongodb";
 
+type AbortControllerProps = {
+  signal: AbortSignal;
+};
+
+
 export const addTodo = async (todo: TodoBody) => {
   todo.completed = false;
   const fullTodo = {
@@ -17,8 +22,12 @@ export const addTodo = async (todo: TodoBody) => {
     ...todo,
   };
   const res = await todosCol.insertOne(fullTodo);
-  return { id: res.insertedId.toString() } as TodoId;
+  if (res.acknowledged) {
+    return { id: res.insertedId.toString() } as TodoId;
+  }
+  throw new Error("Todo not added");
 };
+
 export const updateTodo = async ({ id, todo }: TodoBodyRecordProps) => {
   const res = await todosCol.updateOne(
     { _id: new ObjectId(id) },
@@ -29,6 +38,7 @@ export const updateTodo = async ({ id, todo }: TodoBodyRecordProps) => {
   }
   return { id } as TodoId;
 };
+
 export const deleteTodo = async ({ id }: TodoId) => {
   const res = await todosCol.deleteOne({ _id: new ObjectId(id) });
   if (res.deletedCount === 0) {

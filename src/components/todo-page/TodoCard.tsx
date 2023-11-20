@@ -1,14 +1,16 @@
-import type { QRL } from "@builder.io/qwik";
-import { component$, $, useSignal } from "@builder.io/qwik";
+import type { QRL, Signal } from "@builder.io/qwik";
+import { component$, $, useSignal, useContext } from "@builder.io/qwik";
 import type { SubmitHandler } from "@modular-forms/qwik";
 import { getValue, useForm, valiForm$ } from "@modular-forms/qwik";
 import type { Todo } from "~/models/todo";
 import { type Input, minLength, object, string, boolean } from "valibot";
 import { deleteTodo, updateTodo } from "~/utils/todomongodb";
 import { server$ } from "@builder.io/qwik-city";
+import { toastManagerContext } from "../toast/toastStack";
 
 type TodoCardProps = {
   todo: Todo;
+  refresh: Signal<number>;
 };
 const TodoUpdateSchema = object({
   title: string([minLength(1, "Please enter TODO title.")]),
@@ -16,7 +18,7 @@ const TodoUpdateSchema = object({
 });
 type TodoForm = Input<typeof TodoUpdateSchema>;
 
-export const TodoCard = component$<TodoCardProps>(({ todo }) => {
+export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
   const [TodoForm, { Form, Field }] = useForm<TodoForm>({
     loader: {
       value: { title: todo.title, completed: todo.completed },
@@ -24,12 +26,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo }) => {
     validate: valiForm$(TodoUpdateSchema),
   });
 
-  const deleleHandler = server$(async () => {
-    await deleteTodo({
-      id: todo.id,
-    });
-  });
-
+  const toastManager = useContext(toastManagerContext);
   const isLoadingDelete = useSignal(false);
   const isLoadingUpdate = useSignal(false);
   const disabledSavebutton = useSignal(true);
@@ -44,16 +41,55 @@ export const TodoCard = component$<TodoCardProps>(({ todo }) => {
     });
   });
 
-  const submitHandler: QRL<SubmitHandler<TodoForm>> = $(
+  const submitHandlerUpdate: QRL<SubmitHandler<TodoForm>> = $(
     async (values, event) => {
       if (TodoForm.invalid) {
         return;
       }
       isLoadingUpdate.value = true;
-      await updateTodoOnServer(values);
-      window.location.reload();
+      try {
+        await updateTodoOnServer(values);
+        toastManager.addToast({
+          message: "TODO Updated",
+          type: "success",
+          autocloseTime: 5000,
+        });
+        refresh.value += 1;
+      } catch (error) {
+        toastManager.addToast({
+          message: "Failed to update TODO",
+          type: "error",
+          autocloseTime: 5000,
+        });
+      }
     },
   );
+
+  const deleleTodoOnServer = server$(async () => {
+    await deleteTodo({
+      id: todo.id,
+    });
+  });
+
+  const submitHandlerDelete = $(async () => {
+    isLoadingDelete.value = true;
+    try {
+      await deleleTodoOnServer();
+      toastManager.addToast({
+        message: "TODO deleted",
+        type: "success",
+        autocloseTime: 5000,
+      });
+      // window.location.reload();
+      refresh.value += 1;
+    } catch (error) {
+      toastManager.addToast({
+        message: "Failed to delete TODO",
+        type: "error",
+        autocloseTime: 5000,
+      });
+    }
+  });
 
   const handleInputChange = $(async () => {
     disabledSavebutton.value = false;
@@ -62,7 +98,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo }) => {
   return (
     <div class="card card-bordered  min-w-[400px] shadow-lg">
       <div class="card-body">
-        <Form onSubmit$={submitHandler}>
+        <Form onSubmit$={submitHandlerUpdate}>
           <Field name="title" type="string">
             {(field, props) => (
               <div>
@@ -132,11 +168,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo }) => {
               <button
                 class="btn btn-outline btn-error btn-sm"
                 type="button"
-                onClick$={async () => {
-                  isLoadingDelete.value = true;
-                  await deleleHandler();
-                  window.location.reload();
-                }}
+                onClick$={submitHandlerDelete}
               >
                 Delete
               </button>
