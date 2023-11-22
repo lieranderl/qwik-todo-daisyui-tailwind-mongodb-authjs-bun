@@ -80,7 +80,6 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
         type: "success",
         autocloseTime: 5000,
       });
-      // window.location.reload();
       refresh.value += 1;
     } catch (error) {
       toastManager.addToast({

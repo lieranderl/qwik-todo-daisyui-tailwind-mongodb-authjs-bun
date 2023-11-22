@@ -15,7 +15,18 @@ export const TodoList = component$(() => {
   const session = useAuthSession();
 
   const getTodoFromServer = server$(async (email: string) => {
-    return await getTodoList({ email: email });
+    const todolist =  await getTodoList({ email: email });
+    // sort by completed
+    todolist.sort((a, b) => {
+      if (a.completed && !b.completed) {
+        return 1;
+      } else if (!a.completed && b.completed) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    return todolist;
   });
 
   const resource = useResource$(async ({ track }) => {
