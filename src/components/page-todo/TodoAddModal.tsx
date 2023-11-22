@@ -2,9 +2,9 @@ import type { QRL, Signal } from "@builder.io/qwik";
 import { component$, $, useSignal, useContext } from "@builder.io/qwik";
 import { server$ } from "@builder.io/qwik-city";
 import type { SubmitHandler } from "@modular-forms/qwik";
-import { useForm, valiForm$ } from "@modular-forms/qwik";
+import { setValue, setValues, useForm, valiForm$ } from "@modular-forms/qwik";
 import type { Input } from "valibot";
-import { object, string, minLength } from "valibot";
+import { object, string, minLength, is } from "valibot";
 import { useAuthSession } from "~/routes/plugin@auth";
 import { addTodo } from "~/utils/todomongodb";
 import { toastManagerContext } from "../toast/toastStack";
@@ -54,16 +54,23 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
           type: "success",
           autocloseTime: 5000,
         });
+        const dialog = document.getElementById(
+          "addtodo_modal",
+        ) as HTMLDialogElement;
+        dialog.close();
+        setValue(TodoAddForm, "title", "");
+        isLoading.value = false;
       } catch (error) {
         toastManager.addToast({
           message: "Failed to add TODO",
           type: "error",
           autocloseTime: 5000,
         });
+        isLoading.value = false;
+        setValue(TodoAddForm, "title", "");
       }
     },
   );
-
 
   return (
     <dialog id="addtodo_modal" class="modal">
@@ -80,7 +87,7 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
               <div>
                 <input
                   {...props}
-                  autoFocus 
+                  autoFocus
                   class="input card-title input-bordered w-full"
                   //   placeholder="Type TODO title here"
                   type="text"
@@ -106,7 +113,7 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
             {isLoading.value && (
               <button
                 class="btn btn-disabled btn-outline btn-primary btn-sm"
-                type="submit"
+                type="button"
               >
                 <span class="loading loading-spinner loading-sm"></span>
                 Saving...

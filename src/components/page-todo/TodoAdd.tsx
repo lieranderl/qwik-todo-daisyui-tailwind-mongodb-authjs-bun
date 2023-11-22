@@ -8,8 +8,10 @@ export const TodoAdd = component$(() => {
         class="md:tooltip md:tooltip-bottom"
         data-tip={"Add TODO"}
         onClick$={() => {
-          const el = document.getElementById("addtodo_modal") as HTMLDialogElement;
-          el.showModal()
+          const el = document.getElementById(
+            "addtodo_modal",
+          ) as HTMLDialogElement;
+          el.showModal();
         }}
       >
         <HiPlusCircleOutline class="h-8 w-8" />
