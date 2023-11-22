@@ -95,7 +95,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
   });
 
   return (
-    <div class="card card-bordered  min-w-[400px] shadow-lg">
+    <div class="card card-bordered min-w-[400px] max-w-[500px] shadow-lg">
       <div class="card-body">
         <Form onSubmit$={submitHandlerUpdate}>
           <Field name="title" type="string">

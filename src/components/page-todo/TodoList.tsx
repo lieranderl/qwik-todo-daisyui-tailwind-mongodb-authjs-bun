@@ -15,7 +15,7 @@ export const TodoList = component$(() => {
   const session = useAuthSession();
 
   const getTodoFromServer = server$(async (email: string) => {
-    const todolist =  await getTodoList({ email: email });
+    const todolist = await getTodoList({ email: email });
     // sort by completed
     todolist.sort((a, b) => {
       if (a.completed && !b.completed) {
@@ -39,24 +39,26 @@ export const TodoList = component$(() => {
   });
 
   return (
-    <Resource
-      value={resource}
-      onPending={() => (
-        <>
-          <span class="loading loading-spinner loading-sm"></span> Updating...
-        </>
-      )}
-      onRejected={(error) => <>Error: {error.message}</>}
-      onResolved={(todoList) => (
-        <>
-          <div class="flex flex-wrap items-center justify-center gap-4 lg:justify-start mx-4 sm:mx-16">
-            {todoList.map((todo, i) => {
-              return <TodoCard todo={todo} key={i} refresh={refreshEvent} />;
-            })}
-          </div>
-          <TodoAddModal refresh={refreshEvent} />
-        </>
-      )}
-    />
+    <>
+      <Resource
+        value={resource}
+        onPending={() => (
+          <>
+            <span class="loading loading-spinner loading-sm"></span> Updating...
+          </>
+        )}
+        onRejected={(error) => <>Error: {error.message}</>}
+        onResolved={(todoList) => (
+          <>
+            <div class="grid lg:grid-cols-2 2xl:grid-cols-3 justify-items-center gap-4 sm:mx-40 lg:mx-24 xl:mx-40 mx-2">
+              {todoList.map((todo, i) => {
+                return <TodoCard todo={todo} key={i} refresh={refreshEvent} />;
+              })}
+            </div>
+          </>
+        )}
+      />
+      <TodoAddModal refresh={refreshEvent} />
+    </>
   );
 });
