@@ -1,13 +1,18 @@
-import type { QRL, Signal } from "@builder.io/qwik";
-import { component$, $, useSignal, useContext } from "@builder.io/qwik";
-import { server$ } from "@builder.io/qwik-city";
-import type { SubmitHandler } from "@modular-forms/qwik";
-import { setValue, setValues, useForm, valiForm$ } from "@modular-forms/qwik";
+import type { Signal } from "@builder.io/qwik";
+import { component$, useContext, useVisibleTask$ } from "@builder.io/qwik";
+import type { ResponseData } from "@modular-forms/qwik";
+import {
+  formAction$,
+  reset,
+  setValue,
+  useForm,
+  valiForm$,
+} from "@modular-forms/qwik";
 import type { Input } from "valibot";
-import { object, string, minLength, is } from "valibot";
-import { useAuthSession } from "~/routes/plugin@auth";
+import { object, string, minLength } from "valibot";
 import { addTodo } from "~/utils/todomongodb";
 import { toastManagerContext } from "../toast/toastStack";
+import type { TodoBody } from "~/models/todo";
 
 const TodoAddSchema = object({
   title: string([minLength(1, "Please enter TODO title.")]),
@@ -19,9 +24,37 @@ type TodoAddModalProps = {
   refresh: Signal<number>;
 };
 
+export const useFormAction = formAction$<TodoAddForm, ResponseData>(
+  async (values, event) => {
+    // Runs on serverPromise<TodoId>
+    const session = event.sharedMap.get("session");
+    if (!session) {
+      throw new Error("User not logged in");
+    }
+    const input = {
+      email: session.user.email,
+      ...values,
+    } as TodoBody;
+
+    try {
+      const resp = await addTodo(input);
+      return {
+        status: "success",
+        message: "Todo added successfully.",
+        data: { id: resp.id },
+      };
+    } catch (error) {
+      return {
+        status: "error",
+        message: "Failed to add TODO",
+        data: { id: "" },
+      };
+    }
+  },
+  valiForm$(TodoAddSchema),
+);
+
 export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
-  const session = useAuthSession();
-  const isLoading = useSignal(false);
   const toastManager = useContext(toastManagerContext);
   const [TodoAddForm, { Form, Field }] = useForm<TodoAddForm>({
     loader: {
@@ -29,48 +62,35 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
         title: "",
       },
     },
+    action: useFormAction(),
     validate: valiForm$(TodoAddSchema),
   });
 
-  const addTodoOnServer = server$(async (values) => {
-    await addTodo(values);
+  useVisibleTask$(async ({ track }) => {
+    track(() => TodoAddForm.response);
+    if (TodoAddForm.response.status === "success") {
+      refresh.value += 1;
+      toastManager.addToast({
+        message: TodoAddForm.response.message!,
+        type: TodoAddForm.response.status!,
+        autocloseTime: 5000,
+      });
+      const dialog = document.getElementById(
+        "addtodo_modal",
+      ) as HTMLDialogElement;
+      dialog.close();
+      setValue(TodoAddForm, "title", "");
+      reset(TodoAddForm);
+    } else if (TodoAddForm.response.status === "error") {
+      toastManager.addToast({
+        message: TodoAddForm.response.message!,
+        type: TodoAddForm.response.status!,
+        autocloseTime: 5000,
+      });
+      setValue(TodoAddForm, "title", "");
+      reset(TodoAddForm);
+    }
   });
-
-  const handleAddTodoSubmit: QRL<SubmitHandler<TodoAddForm>> = $(
-    async (values) => {
-      if (TodoAddForm.invalid) {
-        return;
-      }
-      isLoading.value = true;
-      const v = {
-        email: session.value?.user?.email,
-        ...values,
-      };
-      try {
-        await addTodoOnServer(v);
-        refresh.value += 1;
-        toastManager.addToast({
-          message: "New TODO added",
-          type: "success",
-          autocloseTime: 5000,
-        });
-        const dialog = document.getElementById(
-          "addtodo_modal",
-        ) as HTMLDialogElement;
-        dialog.close();
-        setValue(TodoAddForm, "title", "");
-        isLoading.value = false;
-      } catch (error) {
-        toastManager.addToast({
-          message: "Failed to add TODO",
-          type: "error",
-          autocloseTime: 5000,
-        });
-        isLoading.value = false;
-        setValue(TodoAddForm, "title", "");
-      }
-    },
-  );
 
   return (
     <dialog id="addtodo_modal" class="modal">
@@ -81,15 +101,15 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
           </button>
         </form>
         <h3 class="pb-4 text-lg font-bold">Add new TODO</h3>
-        <Form onSubmit$={handleAddTodoSubmit}>
+        <Form>
           <Field name="title" type="string">
             {(field, props) => (
               <div>
                 <input
                   {...props}
-                  autoFocus
+                  autoFocus={true}
                   class="input card-title input-bordered w-full"
-                  //   placeholder="Type TODO title here"
+                  // placeholder="Type TODO title here"
                   type="text"
                   value={field.value}
                 />
@@ -98,7 +118,7 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
             )}
           </Field>
           <div class="card-actions justify-end pt-4">
-            {!isLoading.value && (
+            {!TodoAddForm.submitting && (
               <button
                 class={
                   TodoAddForm.invalid
@@ -110,7 +130,7 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
                 Save
               </button>
             )}
-            {isLoading.value && (
+            {TodoAddForm.submitting && (
               <button
                 class="btn btn-disabled btn-outline btn-primary btn-sm"
                 type="button"
