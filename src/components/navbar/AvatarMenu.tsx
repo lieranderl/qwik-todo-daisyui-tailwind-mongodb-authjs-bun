@@ -1,4 +1,5 @@
 import { component$ } from "@builder.io/qwik";
+import { Link } from "@builder.io/qwik-city";
 import { useAuthSession, useAuthSignout } from "~/routes/plugin@auth";
 
 export const AvatarMenu = component$(() => {
@@ -20,18 +21,18 @@ export const AvatarMenu = component$(() => {
             class="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
           >
             <li>
-              <a class="justify-between">
+              <Link class="justify-between">
                 {session.value.user.name}
                 <span class="badge">New</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a>Settings</a>
+              <Link>Settings</Link>
             </li>
             <li>
-              <a onClick$={() => signOut.submit({ callbackUrl: "/auth" })}>
+              <div onClick$={() => signOut.submit({ callbackUrl: "/auth" })}>
                 Logout
-              </a>
+              </div>
             </li>
           </ul>
         </div>
