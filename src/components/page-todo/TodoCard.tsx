@@ -1,7 +1,13 @@
-import type { QRL, Signal } from "@builder.io/qwik";
-import { component$, $, useSignal, useContext } from "@builder.io/qwik";
-import type { SubmitHandler } from "@modular-forms/qwik";
-import { getValue, useForm, valiForm$ } from "@modular-forms/qwik";
+import type { Signal } from "@builder.io/qwik";
+import {
+  component$,
+  $,
+  useSignal,
+  useContext,
+  useVisibleTask$,
+} from "@builder.io/qwik";
+import type { ResponseData } from "@modular-forms/qwik";
+import { formAction$, getValue, useForm, valiForm$ } from "@modular-forms/qwik";
 import type { Todo } from "~/models/todo";
 import { type Input, minLength, object, string, boolean } from "valibot";
 import { deleteTodo, updateTodo } from "~/utils/todomongodb";
@@ -12,58 +18,78 @@ type TodoCardProps = {
   todo: Todo;
   refresh: Signal<number>;
 };
+
 const TodoUpdateSchema = object({
   title: string([minLength(1, "Please enter TODO title.")]),
   completed: boolean(),
+  id: string(),
 });
 type TodoForm = Input<typeof TodoUpdateSchema>;
+
+const useFormUpdateAction = formAction$<TodoForm, ResponseData>(
+  async (values, event) => {
+    const session = event.sharedMap.get("session");
+    if (!session) {
+      throw new Error("User not logged in");
+    }
+    try {
+      const resp = await updateTodo({
+        id: values.id,
+        todo: {
+          title: values.title,
+          completed: values.completed,
+        },
+      });
+      return {
+        status: "success",
+        message: "Todo added successfully.",
+        data: { id: resp.id },
+      };
+    } catch (error) {
+      return {
+        status: "error",
+        message: "Failed to update TODO",
+        data: { id: "" },
+      };
+    }
+  },
+  valiForm$(TodoUpdateSchema),
+);
 
 export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
   const [TodoForm, { Form, Field }] = useForm<TodoForm>({
     loader: {
-      value: { title: todo.title, completed: todo.completed },
+      value: { title: todo.title, completed: todo.completed, id: todo.id },
     },
     validate: valiForm$(TodoUpdateSchema),
+    action: useFormUpdateAction(),
   });
 
   const toastManager = useContext(toastManagerContext);
   const isLoadingDelete = useSignal(false);
-  const isLoadingUpdate = useSignal(false);
   const disabledSavebutton = useSignal(true);
 
-  const updateTodoOnServer = server$(async (values) => {
-    await updateTodo({
-      id: todo.id,
-      todo: {
-        title: values.title,
-        completed: values.completed,
-      },
-    });
+  useVisibleTask$(async ({ track }) => {
+    track(() => TodoForm.response);
+    if (TodoForm.response.status === "success") {
+      refresh.value += 1;
+      toastManager.addToast({
+        message: TodoForm.response.message!,
+        type: TodoForm.response.status!,
+        autocloseTime: 5000,
+      });
+      const dialog = document.getElementById(
+        "addtodo_modal",
+      ) as HTMLDialogElement;
+      dialog.close();
+    } else if (TodoForm.response.status === "error") {
+      toastManager.addToast({
+        message: TodoForm.response.message!,
+        type: TodoForm.response.status!,
+        autocloseTime: 5000,
+      });
+    }
   });
-
-  const submitHandlerUpdate: QRL<SubmitHandler<TodoForm>> = $(
-    async (values) => {
-      if (TodoForm.invalid) {
-        return;
-      }
-      isLoadingUpdate.value = true;
-      try {
-        await updateTodoOnServer(values);
-        toastManager.addToast({
-          message: "TODO Updated",
-          type: "success",
-          autocloseTime: 5000,
-        });
-        refresh.value += 1;
-      } catch (error) {
-        toastManager.addToast({
-          message: "Failed to update TODO",
-          type: "error",
-          autocloseTime: 5000,
-        });
-      }
-    },
-  );
 
   const deleleTodoOnServer = server$(async () => {
     await deleteTodo({
@@ -97,7 +123,10 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
   return (
     <div class="card card-bordered min-w-[400px] max-w-[500px] shadow-lg">
       <div class="card-body">
-        <Form onSubmit$={submitHandlerUpdate}>
+        <Form>
+          <Field name="id" type="string">
+            {(_, props) => <input {...props} type="hidden" />}
+          </Field>
           <Field name="title" type="string">
             {(field, props) => (
               <div>
@@ -160,7 +189,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
           </div>
 
           <div class="card-actions justify-end">
-            {!isLoadingUpdate.value && (
+            {!TodoForm.submitting && (
               <button
                 class={
                   disabledSavebutton.value
@@ -172,7 +201,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
                 Save
               </button>
             )}
-            {isLoadingUpdate.value && (
+            {TodoForm.submitting && (
               <button
                 class="btn btn-disabled btn-outline btn-primary btn-sm"
                 type="submit"

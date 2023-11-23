@@ -24,7 +24,7 @@ type TodoAddModalProps = {
   refresh: Signal<number>;
 };
 
-export const useFormAction = formAction$<TodoAddForm, ResponseData>(
+const useFormAction = formAction$<TodoAddForm, ResponseData>(
   async (values, event) => {
     // Runs on serverPromise<TodoId>
     const session = event.sharedMap.get("session");
