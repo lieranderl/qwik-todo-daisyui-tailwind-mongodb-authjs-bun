@@ -26,7 +26,6 @@ type TodoAddModalProps = {
 
 const useFormAction = formAction$<TodoAddForm, ResponseData>(
   async (values, event) => {
-    // Runs on serverPromise<TodoId>
     const session = event.sharedMap.get("session");
     if (!session) {
       throw new Error("User not logged in");
@@ -35,7 +34,6 @@ const useFormAction = formAction$<TodoAddForm, ResponseData>(
       email: session.user.email,
       ...values,
     } as TodoBody;
-
     try {
       const resp = await addTodo(input);
       return {
@@ -56,7 +54,7 @@ const useFormAction = formAction$<TodoAddForm, ResponseData>(
 
 export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
   const toastManager = useContext(toastManagerContext);
-  const [TodoAddForm, { Form, Field }] = useForm<TodoAddForm>({
+  const [TodoAddForm, { Form, Field }] = useForm<TodoAddForm, ResponseData>({
     loader: {
       value: {
         title: "",

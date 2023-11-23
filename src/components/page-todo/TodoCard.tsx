@@ -57,14 +57,13 @@ const useFormUpdateAction = formAction$<TodoForm, ResponseData>(
 );
 
 export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
-  const [TodoForm, { Form, Field }] = useForm<TodoForm>({
+  const [TodoForm, { Form, Field }] = useForm<TodoForm, ResponseData>({
     loader: {
       value: { title: todo.title, completed: todo.completed, id: todo.id },
     },
     validate: valiForm$(TodoUpdateSchema),
     action: useFormUpdateAction(),
   });
-
   const toastManager = useContext(toastManagerContext);
   const isLoadingDelete = useSignal(false);
   const disabledSavebutton = useSignal(true);
