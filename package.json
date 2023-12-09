@@ -52,7 +52,9 @@
     "@auth/mongodb-adapter": "^2.0.6",
     "@modular-forms/qwik": "^0.21.0",
     "@qwikest/icons": "^0.0.13",
+    "@unpic/qwik": "^0.0.36",
     "mongodb": "^6.3.0",
+    "qwik-image": "^0.0.8",
     "typescript-cookie": "^1.0.6",
     "uuidv4": "^6.2.13",
     "valibot": "^0.21.0"

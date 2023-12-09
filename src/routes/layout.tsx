@@ -23,7 +23,7 @@ export const onRequest: RequestHandler = (event) => {
   //auth guard  
   const session: Session | null = event.sharedMap.get("session");  
   if (!session || new Date(session.expires) < new Date() || session.error) {
-    throw event.redirect(302, `/auth`);
+    throw event.redirect(302, `/auth/`);
   }
 };
 

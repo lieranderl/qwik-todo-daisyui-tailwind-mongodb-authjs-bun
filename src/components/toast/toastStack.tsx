@@ -14,6 +14,8 @@ import { v4 as uuidv4 } from "uuid";
 export const toastManagerContext = createContextId<{
   addToast: QRL<(toast: ToastBody) => string>;
   removeToast: QRL<(id: string) => void>;
+  removeAllToasts: QRL<() => void>;
+  removeAllToastsByType: QRL<(type: ToastType) => void>;
 }>("toastManagerContext");
 
 export type ToastBody = {
@@ -33,6 +35,14 @@ export const ToastStack = component$(() => {
     removeToast: $((id: string) => {
       toastsStore.toasts = toastsStore.toasts.filter(
         (toast) => toast.id !== id,
+      );
+    }),
+    removeAllToasts: $(() => {
+      toastsStore.toasts = [];
+    }),
+    removeAllToastsByType: $((type: ToastType) => {
+      toastsStore.toasts = toastsStore.toasts.filter(
+        (toast) => toast.type !== type,
       );
     }),
   });
