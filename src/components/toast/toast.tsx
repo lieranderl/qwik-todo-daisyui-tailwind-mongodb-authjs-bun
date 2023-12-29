@@ -5,10 +5,10 @@ import {
   useVisibleTask$,
   useSignal,
 } from "@builder.io/qwik";
-import type { ToastBody } from "./toastStack";
-import { toastManagerContext } from "./toastStack";
+import type { ToastBody } from "./toast-stack";
+import { toastManagerContext } from "./toast-stack";
 import { ToastProgressBar } from "./progressbar";
-import { ToastBodyComponent } from "./toastBody";
+import { ToastBodyComponent } from "./toast-body";
 export type ToastType = "success" | "error" | "warning" | "info";
 
 type ToastId = {
@@ -20,19 +20,21 @@ export type ToastProps = ToastBody & ToastId;
 export const Toast = component$(
   ({ id, message, type, autocloseTime }: ToastProps) => {
     const toastsFunc = useContext(toastManagerContext);
-    const animClas = useSignal("animate-slide-in-right");
+    const baseClass = " drop-shadow-lg w-90 sm:w-120";
+    const animClas = useSignal("animate-slide-in-right" + baseClass);
     const closeToast = $(() => {
-      animClas.value = "animate-slide-out-right";
+      animClas.value = "animate-slide-out-right" + baseClass;
       setTimeout(() => {
         toastsFunc.removeToast(id);
       }, 400);
     });
 
+    // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       if (autocloseTime) {
         if (autocloseTime > 0) {
           setTimeout(() => {
-            animClas.value = "animate-slide-out-right";
+            animClas.value = "animate-slide-out-right" + baseClass;
             setTimeout(() => {
               toastsFunc.removeToast(id);
             }, 400);
@@ -42,7 +44,7 @@ export const Toast = component$(
     });
 
     return (
-      <div class={[animClas.value, "mb-2", "drop-shadow-lg"]}>
+      <div class={animClas.value}>
         <ToastBodyComponent
           message={message}
           type={type}

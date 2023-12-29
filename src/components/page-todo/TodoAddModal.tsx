@@ -11,7 +11,7 @@ import {
 import type { Input } from "valibot";
 import { object, string, minLength } from "valibot";
 import { addTodo } from "~/utils/todomongodb";
-import { toastManagerContext } from "../toast/toastStack";
+import { toastManagerContext } from "../toast/toast-stack";
 import type { TodoBody } from "~/models/todo";
 
 const TodoAddSchema = object({
@@ -64,6 +64,7 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
     validate: valiForm$(TodoAddSchema),
   });
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
     track(() => TodoAddForm.response);
     if (TodoAddForm.response.status === "success") {
@@ -118,12 +119,9 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
           <div class="card-actions justify-end pt-4">
             {!TodoAddForm.submitting && (
               <button
-                class={
-                  TodoAddForm.invalid
-                    ? "btn btn-disabled btn-outline btn-primary btn-sm"
-                    : "btn btn-outline btn-primary btn-sm"
-                }
+                class="btn btn-outline btn-primary btn-sm"
                 type="submit"
+                disabled={TodoAddForm.submitting}
               >
                 Save
               </button>

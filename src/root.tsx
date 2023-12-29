@@ -7,7 +7,7 @@ import {
 import { RouterHead } from "./components/router-head/router-head";
 
 import "./global.css";
-import { ToastStack } from "./components/toast/toastStack";
+import { ToastStack } from "./components/toast/toast-stack";
 
 export default component$(() => {
   /**

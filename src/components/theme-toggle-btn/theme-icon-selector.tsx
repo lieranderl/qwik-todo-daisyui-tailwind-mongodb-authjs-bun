@@ -87,7 +87,7 @@ const ThemeIcon = component$<SelectorProps>(({ selector, size }) => {
 
 export const ThemeIconTooltip = component$<SelectorProps>(
   ({ selector, size }) => {
-    const baseClass = "tooltip tooltip-bottom btn btn-ghost p-1 font-normal ";
+    const baseClass = "tooltip tooltip-bottom btn btn-ghost px-1 font-normal ";
     const classIconSig = useSignal(baseClass + "w-12");
     useTask$(() => {
       switch (size) {

@@ -12,7 +12,7 @@ import type { Todo } from "~/models/todo";
 import { type Input, minLength, object, string, boolean } from "valibot";
 import { deleteTodo, updateTodo } from "~/utils/todomongodb";
 import { server$ } from "@builder.io/qwik-city";
-import { toastManagerContext } from "../toast/toastStack";
+import { toastManagerContext } from "../toast/toast-stack";
 
 type TodoCardProps = {
   todo: Todo;
@@ -68,6 +68,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
   const isLoadingDelete = useSignal(false);
   const disabledSavebutton = useSignal(true);
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
     track(() => TodoForm.response);
     if (TodoForm.response.status === "success") {
@@ -190,12 +191,9 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
           <div class="card-actions justify-end">
             {!TodoForm.submitting && (
               <button
-                class={
-                  disabledSavebutton.value
-                    ? "btn btn-disabled btn-outline btn-primary btn-sm"
-                    : "btn btn-outline btn-primary btn-sm"
-                }
+                class="btn btn-outline btn-primary btn-sm"
                 type="submit"
+                disabled={disabledSavebutton.value}
               >
                 Save
               </button>

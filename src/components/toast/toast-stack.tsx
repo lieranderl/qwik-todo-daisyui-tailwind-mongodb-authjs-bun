@@ -51,7 +51,7 @@ export const ToastStack = component$(() => {
 
   return (
     <>
-      <div class="fixed bottom-4 right-4 z-[1000] w-72 md:w-80">
+      <div class="toast toast-end z-[1000]">
         {toastsStore.toasts.map((toast) => (
           <Toast key={toast.id} {...toast} />
         ))}

@@ -1,5 +1,5 @@
 import { Slot, component$ } from "@builder.io/qwik";
-import { ThemeToggleBtn } from "../theme-toggle-btn/ThemeToggleBtn";
+import { ThemeToggleBtn } from "../theme-toggle-btn/theme-toggle";
 import { TitleOnToolBar } from "./TitleOnToolBar";
 import { AvatarMenu } from "./AvatarMenu";
 import { SideMenu } from "./SideMenu";
