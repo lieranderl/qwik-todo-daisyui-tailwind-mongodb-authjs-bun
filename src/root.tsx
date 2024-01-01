@@ -24,7 +24,7 @@ export default component$(() => {
         <RouterHead />
       </head>
       <body lang="en" class="font-inter tracking-tight antialiased">
-        <ToastStack>
+        <ToastStack horizontally={"toast-end"} vertically={"toast-bottom"}>
           <RouterOutlet />
           <ServiceWorkerRegister />
         </ToastStack>

@@ -10,7 +10,7 @@ export const ToastProgressBar = component$(
     useStyles$(styles);
     return (
       <progress
-        class="progress absolute bottom-[0px] left-[0px] w-[100%] progress-slide bg-neutral"
+        class="progress-slide progress absolute bottom-[0px] left-[0px] w-[100%] bg-neutral"
         value="0"
         max="100"
         style={`--bar-duration:${progress}ms;`}

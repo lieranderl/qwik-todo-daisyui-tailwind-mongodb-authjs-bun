@@ -5,27 +5,43 @@ import {
   useSignal,
   useStyles$,
 } from "@builder.io/qwik";
-import type { ToastBody } from "./toast-stack";
+import type { ToastBody, ToastStackProps } from "./toast-stack";
 import { toastManagerContext } from "./toast-stack";
 import { ToastProgressBar } from "./progressbar";
 import { ToastBodyComponent } from "./toast-body";
 export type ToastType = "success" | "error" | "warning" | "info";
-import styles from './toast.css?inline';
+import styles from "./toast.css?inline";
 
 type ToastId = {
   id: string;
 };
 
-export type ToastProps = ToastBody & ToastId;
+export type ToastProps = ToastBody & ToastId & ToastStackProps;
 
 export const Toast = component$(
-  ({ id, message, type, autocloseTime }: ToastProps) => {
+  ({ id, message, type, autocloseTime, horizontally }: ToastProps) => {
     useStyles$(styles);
     const toastsFunc = useContext(toastManagerContext);
     const baseClass = " drop-shadow-lg w-90 sm:w-120";
-    const animClas = useSignal("slide-in-right" + baseClass);
+    const animClassIn = useSignal(baseClass);
+    const animClassOut = useSignal(baseClass);
+    const setAnimationClass = (inClass: string, outClass: string) => {
+      animClassIn.value = inClass + baseClass;
+      animClassOut.value = outClass + baseClass;
+    };
+
+    if (horizontally === "toast-center") {
+      setAnimationClass("pop-in-center", "pop-out-center");
+    } else if (horizontally === "toast-end") {
+      setAnimationClass("slide-in-right", "slide-out-right");
+    } else if (horizontally === "toast-start") {
+      setAnimationClass("slide-in-left", "slide-out-left");
+    }
+
+    const animClass = useSignal(animClassIn.value);
+
     const closeToast = $(() => {
-      animClas.value = "slide-out-right" + baseClass;
+      animClass.value = animClassOut.value;
       setTimeout(() => {
         toastsFunc.removeToast(id);
       }, 400);
@@ -34,15 +50,12 @@ export const Toast = component$(
     // autoclose timeout
     if (autocloseTime && autocloseTime > 0) {
       setTimeout(() => {
-        animClas.value = "slide-out-right" + baseClass;
-        setTimeout(() => {
-          toastsFunc.removeToast(id);
-        }, 400);
+        closeToast();
       }, autocloseTime);
     }
 
     return (
-      <div class={animClas.value}>
+      <div class={animClass.value}>
         <ToastBodyComponent
           message={message}
           type={type}
