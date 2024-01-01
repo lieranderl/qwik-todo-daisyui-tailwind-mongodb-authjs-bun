@@ -1,0 +1,38 @@
+@keyframes progress_slide {
+  from {
+    width: "0%";
+  }
+  to {
+    width: "100%";
+  }
+}
+
+@keyframes slide_in_right {
+  0% {
+    transform: "translate3d(110%, 0, 0);";
+    visibility: "visible";
+  }
+  100% {
+    transform: "translate3d(0, 0, 0)";
+  }
+}
+
+@keyframes slide_out_right {
+  0% {
+    transform: "translate3d(0, 0, 0);";
+  }
+  100% {
+    transform: "translate3d(110%, 0, 0);";
+    visibility: "hidden";
+  }
+}
+
+.slide-in-right {
+  animation: slide_in_right 0.5s;
+}
+.slide-out-right {
+  animation: slide_out_right 0.5s;
+}
+.progress-slide {
+  animation: progress_slide var(--bar-duration) linear;
+}
