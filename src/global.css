@@ -18,3 +18,7 @@
 .btn {
   @apply rounded-md border-2 normal-case;
 }
+
+.alert {
+  @apply rounded-md
+}

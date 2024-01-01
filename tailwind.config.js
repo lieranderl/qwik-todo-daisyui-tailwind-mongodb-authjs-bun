@@ -56,7 +56,7 @@ module.exports = {
         },
         progress_slide: {
           from: { width: "0%" },
-          to: { width: "97%" },
+          to: { width: "100%" },
         },
       },
       animation: {
