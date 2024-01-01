@@ -5,7 +5,7 @@ export const TitleOnToolBar = component$(() => {
   return (
     <>
       <div class="flex flex-1">
-       <SiTailwindcss class="h-14 w-16 fill-current p-1"></SiTailwindcss>
+        <SiTailwindcss class="h-14 w-16 fill-current p-1"></SiTailwindcss>
         <div class="mx-2 flex-none px-2">TODO app</div>
       </div>
     </>

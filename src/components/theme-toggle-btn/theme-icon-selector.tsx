@@ -1,15 +1,11 @@
 import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import { HiSunOutline, HiMoonOutline } from "@qwikest/icons/heroicons";
 const ThemeIconDark = component$(() => {
-  return (
-    <HiMoonOutline></HiMoonOutline>
-  );
+  return <HiMoonOutline></HiMoonOutline>;
 });
 
 const ThemeIconLight = component$(() => {
-  return (
-    <HiSunOutline></HiSunOutline>
-  );
+  return <HiSunOutline></HiSunOutline>;
 });
 
 const ThemeIconAuto = component$(() => {

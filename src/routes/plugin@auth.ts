@@ -7,7 +7,6 @@ import type { GoogleProfile } from "@auth/core/providers/google";
 import Google from "@auth/core/providers/google";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 
-
 export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
   serverAuth$(() => ({
     session: {
@@ -32,8 +31,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
             ...profile,
           };
         },
-      }
-      ),
+      }),
       GitHub({
         clientId: process.env.GITHUB_OAUTH_CLIENT_ID,
         clientSecret: process.env.GITHUB_OAUTH_CLIENT_SECRET,
@@ -47,7 +45,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
             theme: "auto", // custom attribute
             language: profile.language,
           };
-        }
+        },
       }),
       Facebook({
         clientId: process.env.FACEBOOK_OAUTH_CLIENT_ID,
@@ -58,44 +56,43 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
             theme: "auto", // custom attribute
             language: profile.language,
           };
-        }
-      })
+        },
+      }),
     ] as Provider[],
     callbacks: {
       async session({ session, user }) {
         // console.log("session:", session, user)
-        session.id = user.id
+        session.id = user.id;
         if (user.theme) {
-          session.theme = user.theme
+          session.theme = user.theme;
         }
-        return session
+        return session;
       },
       async signIn({ account, profile }) {
         if (account && profile) {
           if (account.provider === "google") {
             const p = profile as GoogleProfile;
-            return p.email_verified && p.email.endsWith("@gmail.com")
+            return p.email_verified && p.email.endsWith("@gmail.com");
           }
           if (account.provider === "github") {
-            return true
+            return true;
           }
         }
-        return false
+        return false;
       },
     },
   }));
 
-
 declare module "@auth/core/types" {
   interface Session {
-    error?: "RefreshAccessTokenError"
-    id?: string
-    theme?: string
+    error?: "RefreshAccessTokenError";
+    id?: string;
+    theme?: string;
   }
 }
 
 declare module "@auth/core/adapters" {
   interface AdapterUser {
-    theme?: string
+    theme?: string;
   }
 }

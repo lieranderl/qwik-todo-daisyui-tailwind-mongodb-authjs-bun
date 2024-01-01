@@ -97,7 +97,6 @@ export const ThemeToggleBtn = component$<ThemeToggleBtnProps>(({ size }) => {
     }
   });
 
-  
   useVisibleTask$(async () => {
     window
       .matchMedia("(prefers-color-scheme: dark)")

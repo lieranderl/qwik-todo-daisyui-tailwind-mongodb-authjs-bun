@@ -14,19 +14,9 @@ export const getIconByType = $((type: ToastType) => {
     case "error":
       return <HiXCircleSolid class="h-6 w-6" aria-hidden="true" />;
     case "warning":
-      return (
-        <HiExclamationTriangleSolid
-          class="h-6 w-6"
-          aria-hidden="true"
-        />
-      );
+      return <HiExclamationTriangleSolid class="h-6 w-6" aria-hidden="true" />;
     case "info":
-      return (
-        <HiInformationCircleSolid
-          class="h-6 w-6"
-          aria-hidden="true"
-        />
-      );
+      return <HiInformationCircleSolid class="h-6 w-6" aria-hidden="true" />;
     default:
       return <></>;
   }

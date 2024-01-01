@@ -51,12 +51,12 @@ export const TodoList = component$(() => {
       // autocloseTime: 30000,
     });
     toastManager.addToast({
-      message: "Welcome to Qwik Todo Welcome to Qwik Todo!! Welcome to Qwik Todo!",
+      message:
+        "Welcome to Qwik Todo Welcome to Qwik Todo!! Welcome to Qwik Todo!",
       type: "error",
       autocloseTime: 5000,
     });
-    })
-  
+  });
 
   const resource = useResource$(async ({ track }) => {
     track(() => refreshEvent.value);
@@ -79,7 +79,7 @@ export const TodoList = component$(() => {
         onRejected={(error) => <>Error: {error.message}</>}
         onResolved={(todoList) => (
           <>
-            <div class="grid lg:grid-cols-2 2xl:grid-cols-3 justify-items-center gap-4 sm:mx-40 lg:mx-24 xl:mx-40 mx-2">
+            <div class="mx-2 grid justify-items-center gap-4 sm:mx-40 lg:mx-24 lg:grid-cols-2 xl:mx-40 2xl:grid-cols-3">
               {todoList.map((todo, i) => {
                 return <TodoCard todo={todo} key={i} refresh={refreshEvent} />;
               })}

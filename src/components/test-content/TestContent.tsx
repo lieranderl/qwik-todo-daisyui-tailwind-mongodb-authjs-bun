@@ -49,19 +49,19 @@ export const TestContent = component$(() => {
         </div>
 
         <div class="flex flex-wrap gap-2">
-          <button class="btn btn-primary btn-outline btn-sm">Primary</button>
-          <button class="btn btn-secondary btn-outline btn-sm">
+          <button class="btn btn-outline btn-primary btn-sm">Primary</button>
+          <button class="btn btn-outline btn-secondary btn-sm">
             Secondary
           </button>
-          <button class="btn btn-accent btn-outline btn-sm">Accent</button>
-          <button class="btn btn-info btn-outline btn-sm">Info</button>
-          <button class="btn btn-success btn-outline btn-sm">Success</button>
-          <button class="btn btn-warning btn-outline btn-sm">Warning</button>
-          <button class="btn btn-error btn-outline btn-sm">Error</button>
+          <button class="btn btn-outline btn-accent btn-sm">Accent</button>
+          <button class="btn btn-outline btn-info btn-sm">Info</button>
+          <button class="btn btn-outline btn-success btn-sm">Success</button>
+          <button class="btn btn-outline btn-warning btn-sm">Warning</button>
+          <button class="btn btn-outline btn-error btn-sm">Error</button>
         </div>
         <div>
           <button
-            class="btn btn-primary btn-outline btn-sm"
+            class="btn btn-outline btn-primary btn-sm"
             onClick$={() => {
               addToast();
             }}
@@ -74,7 +74,7 @@ export const TestContent = component$(() => {
             </label>
             <ul
               tabIndex={0}
-              class="menu dropdown-content rounded-box z-[1] w-52 bg-base-100 p-2 shadow"
+              class="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow"
             >
               <li>
                 <a>Item 1</a>

@@ -8,7 +8,7 @@ export type LoginButtonProps = QwikIntrinsicElements["button"] & {
 
 export const LoginButton = component$<LoginButtonProps>((props) => {
   const loginBtnClass = "btn btn-secondary justify-start ";
-  const fullClass = props.class ? loginBtnClass + props.class  : loginBtnClass;
+  const fullClass = props.class ? loginBtnClass + props.class : loginBtnClass;
   const providerName = props.providerName || "google";
   const signIn = useAuthSignin();
   return (
