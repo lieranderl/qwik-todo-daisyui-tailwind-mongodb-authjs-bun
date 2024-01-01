@@ -165,24 +165,23 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
               </div>
             )}
             <label class="label w-fit cursor-pointer">
-              {getValue(TodoForm, "completed") ? (
-                <span class="label-text mx-4 text-success">Completed</span>
-              ) : (
-                <span class="label-text mx-4 text-info">Active</span>
-              )}
               <Field name="completed" type="boolean">
                 {(field, props) => (
-                  <input
-                    {...props}
-                    type="checkbox"
-                    class={
-                      getValue(TodoForm, "completed")
-                        ? "checkbox-success checkbox"
-                        : "checkbox-info checkbox"
-                    }
-                    checked={field.value}
-                    onChange$={handleInputChange}
-                  />
+                  <div class="flex flex-row-reverse">
+                    <input
+                      {...props}
+                      type="checkbox"
+                      class="peer checkbox-info checkbox checked:checkbox-success"
+                      checked={field.value}
+                      onChange$={handleInputChange}
+                    />
+                    <span class="label-text mx-4 hidden text-success peer-checked:block">
+                      Completed
+                    </span>
+                    <span class="label-text mx-4 text-info peer-checked:hidden">
+                      Active
+                    </span>
+                  </div>
                 )}
               </Field>
             </label>
