@@ -40,30 +40,9 @@ module.exports = {
           "0%": { opacity: 0.1, transform: "rotate(45deg)" },
           "100%": { opacity: 1, transform: "rotate(0deg)" },
         },
-        slide_in_right: {
-          "0%": {
-            transform: "translate3d(110%, 0, 0);",
-            visibility: "visible",
-          },
-          "100%": { transform: "translate3d(0, 0, 0)" },
-        },
-        slide_out_right: {
-          "0%": { transform: "translate3d(0, 0, 0)" },
-          "100%": {
-            transform: "translate3d(110%, 0, 0);",
-            visibility: "hidden",
-          },
-        },
-        progress_slide: {
-          from: { width: "0%" },
-          to: { width: "100%" },
-        },
       },
       animation: {
         rotate45: "rotate45 0.5s ease-out",
-        "slide-in-right": "slide_in_right 0.5s",
-        "slide-out-right": "slide_out_right 0.5s",
-        "progress-slide": "progress_slide var(--bar-duration) linear",
       },
     },
   },

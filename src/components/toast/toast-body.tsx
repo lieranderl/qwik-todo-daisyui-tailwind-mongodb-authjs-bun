@@ -1,29 +1,25 @@
-import type { PropFunction } from "@builder.io/qwik";
+import type { PropFunction, QRL } from "@builder.io/qwik";
 import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import type { ToastBody } from "./toast-stack";
 import { getIconByType } from "./utils";
 import { HiXMarkSolid } from "@qwikest/icons/heroicons";
 
 export type ToastBodyComponentProps = {
-  closeToast: PropFunction;
+  closeToast: QRL<PropFunction<() => void>>;
 } & ToastBody;
 
 export const ToastBodyComponent = component$(
   ({ message, type, closeToast }: ToastBodyComponentProps) => {
-    const classAlert = useSignal("");
+    const classAlert = useSignal("flex items-center justify-between alert");
 
     useTask$(() => {
-      if (type === "info")
-        classAlert.value = "flex items-center justify-between alert alert-info";
+      if (type === "info") classAlert.value = classAlert.value + " alert-info";
       if (type === "success")
-        classAlert.value =
-          "flex items-center justify-between alert alert-success";
+        classAlert.value = classAlert.value + " alert-success";
       if (type === "warning")
-        classAlert.value =
-          "flex items-center justify-between alert alert-warning";
+        classAlert.value = classAlert.value + " alert-warning";
       if (type === "error")
-        classAlert.value =
-          "flex items-center justify-between alert alert-error";
+        classAlert.value = classAlert.value + " alert-error";
     });
 
     return (
@@ -40,7 +36,6 @@ export const ToastBodyComponent = component$(
           type="button"
           class="rounded-lg p-1 text-sm focus:outline-none focus:ring-0"
           aria-label="Close"
-          // eslint-disable-next-line qwik/valid-lexical-scope
           onClick$={closeToast}
         >
           <HiXMarkSolid class="h-6 w-6" aria-hidden="true" />

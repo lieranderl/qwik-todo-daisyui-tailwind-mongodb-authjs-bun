@@ -97,6 +97,7 @@ export const ThemeToggleBtn = component$<ThemeToggleBtnProps>(({ size }) => {
     }
   });
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     window
       .matchMedia("(prefers-color-scheme: dark)")
