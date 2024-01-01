@@ -2,7 +2,6 @@ import {
   component$,
   $,
   useContext,
-  useVisibleTask$,
   useSignal,
 } from "@builder.io/qwik";
 import type { ToastBody } from "./toast-stack";
@@ -29,19 +28,15 @@ export const Toast = component$(
       }, 400);
     });
 
-    // eslint-disable-next-line qwik/no-use-visible-task
-    useVisibleTask$(() => {
-      if (autocloseTime) {
-        if (autocloseTime > 0) {
-          setTimeout(() => {
-            animClas.value = "animate-slide-out-right" + baseClass;
-            setTimeout(() => {
-              toastsFunc.removeToast(id);
-            }, 400);
-          }, autocloseTime);
-        }
-      }
-    });
+    //
+    if (autocloseTime && autocloseTime > 0) {
+      setTimeout(() => {
+        animClas.value = "animate-slide-out-right" + baseClass;
+        setTimeout(() => {
+          toastsFunc.removeToast(id);
+        }, 400);
+      }, autocloseTime);
+    }
 
     return (
       <div class={animClas.value}>
