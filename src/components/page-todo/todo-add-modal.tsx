@@ -81,8 +81,6 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
       refresh.value++;
       resetForm$();
     }
-
-    console.log("refresh.value", refresh.value);
   });
 
   return (

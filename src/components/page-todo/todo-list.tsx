@@ -31,13 +31,9 @@ export const TodoList = component$(() => {
 
   const resource = useResource$(async ({ track }) => {
     track(() => refreshEvent.value);
-
-    console.log("Resource called", refreshEvent.value);
-
     if (!session.value?.user?.email) {
       throw new Error("User not logged in");
     }
-
     return await getTodoFromServer(session.value.user.email);
   });
 

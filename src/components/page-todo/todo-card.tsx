@@ -71,18 +71,8 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
     track(() => TodoForm.response);
-    if (TodoForm.response.status === "success") {
-      refresh.value += 1;
-      toastManager.addToast({
-        message: TodoForm.response.message!,
-        type: TodoForm.response.status!,
-        autocloseTime: 5000,
-      });
-      const dialog = document.getElementById(
-        "addtodo_modal",
-      ) as HTMLDialogElement;
-      dialog.close();
-    } else if (TodoForm.response.status === "error") {
+    if (TodoForm.response.status) {
+      refresh.value++;
       toastManager.addToast({
         message: TodoForm.response.message!,
         type: TodoForm.response.status!,
@@ -91,22 +81,22 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
     }
   });
 
-  const deleleTodoOnServer = server$(async () => {
+  const deleleTodoOnServer$ = server$(async () => {
     await deleteTodo({
       id: todo.id,
     });
   });
 
-  const submitHandlerDelete = $(async () => {
+  const submitHandlerDelete$ = $(async () => {
     isLoadingDelete.value = true;
     try {
-      await deleleTodoOnServer();
+      await deleleTodoOnServer$();
       toastManager.addToast({
         message: "TODO deleted",
         type: "success",
         autocloseTime: 5000,
       });
-      refresh.value += 1;
+      refresh.value++;
     } catch (error) {
       toastManager.addToast({
         message: "Failed to delete TODO",
@@ -116,7 +106,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
     }
   });
 
-  const handleInputChange = $(async () => {
+  const handleInputChange$ = $(async () => {
     disabledSavebutton.value = false;
   });
 
@@ -140,7 +130,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
                   placeholder="Type TODO title here"
                   type="text"
                   value={field.value}
-                  onClick$={handleInputChange}
+                  onClick$={handleInputChange$}
                 />
                 {field.error && <div>{field.error}</div>}
               </div>
@@ -173,7 +163,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
                       type="checkbox"
                       class="peer checkbox-info checkbox checked:checkbox-success"
                       checked={field.value}
-                      onChange$={handleInputChange}
+                      onChange$={handleInputChange$}
                     />
                     <span class="label-text mx-4 hidden text-success peer-checked:block">
                       Completed
@@ -211,7 +201,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
               <button
                 class="btn btn-outline btn-error btn-sm"
                 type="button"
-                onClick$={submitHandlerDelete}
+                onClick$={submitHandlerDelete$}
               >
                 Delete
               </button>
