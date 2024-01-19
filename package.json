@@ -1,5 +1,5 @@
 {
-  "name": "qwik-todo-daisyui-tailwind-mongodb",
+  "name": "qwik-todo-daisyui-tailwind-mongodb-authjs-bun",
   "devDependencies": {
     "@auth/core": "^0.13.0",
     "@builder.io/qwik": "^1.4.0",
@@ -23,7 +23,7 @@
     "vite": "^5.0.12",
     "vite-tsconfig-paths": "^4.3.1"
   },
-  "description": "qwik-todo-daisyui-tailwind-mongodb",
+  "description": "qwik-todo-daisyui-tailwind-mongodb-authjs-bun",
   "engines": {
     "node": ">=15.0.0"
   },
