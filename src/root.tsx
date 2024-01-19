@@ -7,7 +7,8 @@ import {
 import { RouterHead } from "./components/router-head/router-head";
 
 import "./global.css";
-import { ToastStack } from "./components/toast/toast-stack";
+import { ToastStack } from "qwik-toasts";
+import { ThemeScript } from "qwik-theme-toggle";
 
 export default component$(() => {
   /**
@@ -22,6 +23,7 @@ export default component$(() => {
         <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.json" />
         <RouterHead />
+        <ThemeScript themeStorageKey="theme" />
       </head>
       <body lang="en" class="font-inter tracking-tight antialiased">
         <ToastStack horizontally={"toast-end"} vertically={"toast-bottom"}>

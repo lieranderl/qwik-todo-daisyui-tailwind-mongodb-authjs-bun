@@ -11,12 +11,10 @@ import { TodoAddModal } from "./TodoAddModal";
 import { getTodoList } from "~/utils/todomongodb";
 import { useAuthSession } from "~/routes/plugin@auth";
 import { server$ } from "@builder.io/qwik-city";
-import { toastManagerContext } from "../toast/toast-stack";
 
 export const TodoList = component$(() => {
   const refreshEvent = useSignal(0);
   const session = useAuthSession();
-  const toastManager = useContext(toastManagerContext);
 
   const getTodoFromServer = server$(async (email: string) => {
     const todolist = await getTodoList({ email: email });
@@ -31,31 +29,6 @@ export const TodoList = component$(() => {
       }
     });
     return todolist;
-  });
-
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    toastManager.addToast({
-      message: "Welcome to Qwik Todo!",
-      type: "success",
-      autocloseTime: 30000,
-    });
-    toastManager.addToast({
-      message: "Welcome to Qwik Todo!",
-      type: "info",
-      // autocloseTime: 30000,
-    });
-    toastManager.addToast({
-      message: "Welcome to Qwik Todo! Welcome to Qwik Todo!",
-      type: "warning",
-      // autocloseTime: 30000,
-    });
-    toastManager.addToast({
-      message:
-        "Welcome to Qwik Todo Welcome to Qwik Todo!! Welcome to Qwik Todo!",
-      type: "error",
-      autocloseTime: 5000,
-    });
   });
 
   const resource = useResource$(async ({ track }) => {

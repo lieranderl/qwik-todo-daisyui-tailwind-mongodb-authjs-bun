@@ -4,9 +4,7 @@ import { TodoList } from "~/components/page-todo/TodoList";
 
 export default component$(() => {
   return (
-    <>
       <TodoList />
-    </>
   );
 });
 
@@ -14,7 +12,7 @@ export const head: DocumentHead = {
   title: "TODO app",
   meta: [
     {
-      name: "description",
+      name: "TODO app",
       content: "TODO app",
     },
   ],

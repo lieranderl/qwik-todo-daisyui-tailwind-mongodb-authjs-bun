@@ -1,5 +1,5 @@
 {
-  "name": "qwik-daisyui-tailwind-init",
+  "name": "qwik-todo-daisyui-tailwind-mongodb",
   "devDependencies": {
     "@auth/core": "^0.13.0",
     "@builder.io/qwik": "^1.2.18",
@@ -23,7 +23,7 @@
     "vite": "^4.5.0",
     "vite-tsconfig-paths": "^4.2.1"
   },
-  "description": "qwik-daisyui-tailwind-init",
+  "description": "qwik-todo-daisyui-tailwind-mongodb",
   "engines": {
     "node": ">=15.0.0"
   },
@@ -51,10 +51,12 @@
   "dependencies": {
     "@auth/mongodb-adapter": "^2.0.6",
     "@modular-forms/qwik": "^0.21.0",
-    "@qwikest/icons": "^0.0.13",
+    "@qwikest/icons": "latest",
     "@unpic/qwik": "^0.0.36",
     "mongodb": "^6.3.0",
     "qwik-image": "^0.0.8",
+    "qwik-theme-toggle": "^1.0.9",
+    "qwik-toasts": "^0.0.7",
     "typescript-cookie": "^1.0.6",
     "uuidv4": "^6.2.13",
     "valibot": "^0.21.0"

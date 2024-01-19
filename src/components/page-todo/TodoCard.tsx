@@ -12,7 +12,7 @@ import type { Todo } from "~/models/todo";
 import { type Input, minLength, object, string, boolean } from "valibot";
 import { deleteTodo, updateTodo } from "~/utils/todomongodb";
 import { server$ } from "@builder.io/qwik-city";
-import { toastManagerContext } from "../toast/toast-stack";
+import { ToastManagerContext } from "qwik-toasts";
 
 type TodoCardProps = {
   todo: Todo;
@@ -64,7 +64,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
     validate: valiForm$(TodoUpdateSchema),
     action: useFormUpdateAction(),
   });
-  const toastManager = useContext(toastManagerContext);
+  const toastManager = useContext(ToastManagerContext);
   const isLoadingDelete = useSignal(false);
   const disabledSavebutton = useSignal(true);
 

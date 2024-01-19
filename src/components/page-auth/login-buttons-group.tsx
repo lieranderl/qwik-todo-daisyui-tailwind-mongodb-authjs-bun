@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { SiGoogle, SiGithub, SiFacebook } from "@qwikest/icons/simpleicons";
-import { LoginButton } from "./LoginButton";
+import { LoginButton } from "./login-button";
 
 export const LoginButtons = component$(() => {
   return (

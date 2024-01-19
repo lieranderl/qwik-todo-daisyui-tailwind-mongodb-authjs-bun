@@ -11,8 +11,8 @@ import {
 import type { Input } from "valibot";
 import { object, string, minLength } from "valibot";
 import { addTodo } from "~/utils/todomongodb";
-import { toastManagerContext } from "../toast/toast-stack";
 import type { TodoBody } from "~/models/todo";
+import { ToastManagerContext } from "qwik-toasts";
 
 const TodoAddSchema = object({
   title: string([minLength(1, "Please enter TODO title.")]),
@@ -53,7 +53,7 @@ const useFormAction = formAction$<TodoAddForm, ResponseData>(
 );
 
 export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
-  const toastManager = useContext(toastManagerContext);
+  const toastManager = useContext(ToastManagerContext);
   const [TodoAddForm, { Form, Field }] = useForm<TodoAddForm, ResponseData>({
     loader: {
       value: {
