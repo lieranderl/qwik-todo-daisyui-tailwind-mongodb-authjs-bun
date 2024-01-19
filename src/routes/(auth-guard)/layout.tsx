@@ -1,7 +1,7 @@
 import type { Session } from "@auth/core/types";
 import { component$, Slot } from "@builder.io/qwik";
 import { type RequestHandler } from "@builder.io/qwik-city";
-import { Navbar } from "~/components/navbar/navbar";
+import { Navbar } from "~/components/navbar/Navbar";
 
 export const onRequest: RequestHandler = (event) => {
   event.cacheControl({
