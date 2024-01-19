@@ -16,19 +16,19 @@ To get a local copy up and running, follow these simple steps.
 
 Clone the repository
 
-```
+```bash
 git clone https://github.com/lieranderl/qwik-todo-daisyui-tailwind-mongodb-authjs-bun.git
 ```
 
 Install packages
 
-```
+```bash
 bun install
 ```
 
 Make env.local file:
 
-```
+```text
 AUTH_SECRET:
     xxxxxxxxxxxxxxxxx
 GOOGLE_ID:
@@ -56,7 +56,7 @@ MONGO_URI:
 
 Start the server
 
-```
+```bash
 bun start
 ```
 
@@ -81,4 +81,4 @@ Contributions are what make the open-source community such an amazing place to l
 
 ## Contact
 
-Project Link: https://github.com/lieranderl/qwik-todo-daisyui-tailwind-mongodb-authjs-bun
+Project Link: <https://github.com/lieranderl/qwik-todo-daisyui-tailwind-mongodb-authjs-bun>
