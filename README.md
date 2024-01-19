@@ -14,15 +14,42 @@ To get a local copy up and running, follow these simple steps.
 
 ### Installation
 
-1. Clone the repository
+   Clone the repository
 ```
 git clone https://github.com/lieranderl/qwik-todo-daisyui-tailwind-mongodb-authjs-bun.git
 ```
-1. Install packages
+   Install packages
 ```
 bun install
 ```
-1. Start the server
+Make env.local file:
+```
+AUTH_SECRET:
+    xxxxxxxxxxxxxxxxx
+GOOGLE_ID:
+    xxxxxxxxxxxxxxxxx
+GOOGLE_SECRET:
+    xxxxxxxxxxxxxxxxx
+GITHUB_OAUTH_CLIENT_ID:
+    xxxxxxxxxxxxxxxxx
+GITHUB_OAUTH_CLIENT_SECRET:
+    xxxxxxxxxxxxxxxxx
+FACEBOOK_OAUTH_CLIENT_ID:
+    xxxxxxxxxxxxxxxxx
+FACEBOOK_OAUTH_CLIENT_SECRET:
+    xxxxxxxxxxxxxxxxx
+MONGO_INITDB_ROOT_USERNAME:
+    xxxxxx
+MONGO_INITDB_ROOT_PASSWORD:
+    xxxxxx
+MONGO_DOMAIN:
+    xxxxxxxxxxxxx.mongodb.net
+MONGO_URI:
+    mongodb+srv://$MONGO_INITDB_ROOT_USERNAME:$MONGO_INITDB_ROOT_PASSWORD@$MONGO_DOMAIN/?retryWrites=true&w=majority
+
+```
+
+   Start the server
 ```
 bun start
 ```
