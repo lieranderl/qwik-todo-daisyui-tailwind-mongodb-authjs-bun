@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/qwik-theme-toggle/**/*.{cjs,mjs}",
+    "./node_modules/qwik-toasts/**/*.{cjs,mjs}",
+  ],
   daisyui: {
     themes: [
       {
@@ -14,6 +18,16 @@ module.exports = {
           success: "#45991F",
           warning: "#BD7202",
           error: "#CC2D37",
+          "--rounded-box": ".25rem",
+          "--rounded-btn": ".25rem",
+          "--rounded-badge": "1.9rem",
+
+          "--animation-btn": ".25s",
+          "--animation-input": ".2s",
+
+          "--btn-text-case": "normal-case",
+          "--navbar-padding": ".5rem",
+          "--border-btn": "1.5px",
         },
         dark: {
           primary: "#649EF5",
@@ -25,6 +39,16 @@ module.exports = {
           success: "#6BBF41",
           warning: "#f0c243",
           error: "#FA5762",
+          "--rounded-box": ".25rem",
+          "--rounded-btn": ".25rem",
+          "--rounded-badge": "1.9rem",
+
+          "--animation-btn": ".25s",
+          "--animation-input": ".2s",
+
+          "--btn-text-case": "normal-case",
+          "--navbar-padding": ".5rem",
+          "--border-btn": "1.5px",
         },
       },
     ],
@@ -34,36 +58,6 @@ module.exports = {
     extend: {
       fontFamily: {
         inter: ["Inter", "sans-serif"],
-      },
-      keyframes: {
-        rotate45: {
-          "0%": { opacity: 0.1, transform: "rotate(45deg)" },
-          "100%": { opacity: 1, transform: "rotate(0deg)" },
-        },
-        slide_in_right: {
-          "0%": {
-            transform: "translate3d(110%, 0, 0);",
-            visibility: "visible",
-          },
-          "100%": { transform: "translate3d(0, 0, 0)" },
-        },
-        slide_out_right: {
-          "0%": { transform: "translate3d(0, 0, 0)" },
-          "100%": {
-            transform: "translate3d(110%, 0, 0);",
-            visibility: "hidden",
-          },
-        },
-        progress_slide: {
-          from: { width: "0%" },
-          to: { width: "100%" },
-        },
-      },
-      animation: {
-        rotate45: "rotate45 0.5s ease-out",
-        "slide-in-right": "slide_in_right 0.5s",
-        "slide-out-right": "slide_out_right 0.5s",
-        "progress-slide": "progress_slide var(--bar-duration) linear",
       },
     },
   },

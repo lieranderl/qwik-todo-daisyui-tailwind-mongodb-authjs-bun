@@ -7,8 +7,8 @@ import {
 import { RouterHead } from "./components/router-head/router-head";
 
 import "./global.css";
-import { DarkThemeLauncher } from "./utils/DarkThemeLauncher";
-import { ToastStack } from "./components/toast/toastStack";
+import { ToastStack } from "qwik-toasts";
+import { ThemeScript } from "qwik-theme-toggle";
 
 export default component$(() => {
   /**
@@ -17,17 +17,16 @@ export default component$(() => {
    *
    * Don't remove the `<head>` and `<body>` elements.
    */
-
   return (
     <QwikCityProvider>
       <head>
         <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.json" />
-        <DarkThemeLauncher />
         <RouterHead />
+        <ThemeScript themeStorageKey="theme" />
       </head>
       <body lang="en" class="font-inter tracking-tight antialiased">
-        <ToastStack>
+        <ToastStack horizontally={"toast-end"} vertically={"toast-bottom"}>
           <RouterOutlet />
           <ServiceWorkerRegister />
         </ToastStack>

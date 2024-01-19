@@ -18,6 +18,27 @@ import { manifest } from "@qwik-client-manifest";
 import Root from "./root";
 
 export default function (opts: RenderToStreamOptions) {
+  // get them from the query or cookie and set it on the html tag
+  if (opts.serverData && opts.serverData.requestHeaders.cookie) {
+    if (opts.serverData.url.includes("theme=")) {
+      opts.containerAttributes = {
+        ...opts.containerAttributes,
+        "data-theme": opts.serverData.url.split("theme=")[1].split("&")[0],
+      };
+    } else {
+      opts.serverData.requestHeaders.cookie
+        .split(";")
+        .forEach((cookie: string) => {
+          if (cookie.includes("theme=")) {
+            opts.containerAttributes = {
+              ...opts.containerAttributes,
+              "data-theme": cookie.split("theme=")[1].split(";")[0],
+            };
+          }
+        });
+    }
+  }
+
   return renderToStream(<Root />, {
     manifest,
     ...opts,

@@ -1,27 +1,29 @@
 {
-  "name": "qwik-daisyui-tailwind-init",
+  "name": "qwik-todo-daisyui-tailwind-mongodb",
   "devDependencies": {
-    "@builder.io/qwik": "^1.2.17",
-    "@builder.io/qwik-city": "^1.2.17",
-    "@types/eslint": "^8.44.4",
-    "@types/node": "^20.8.4",
-    "@typescript-eslint/eslint-plugin": "^6.7.5",
-    "@typescript-eslint/parser": "^6.7.5",
-    "autoprefixer": "^10.4.14",
-    "bun-types": "^1.0.10",
-    "daisyui": "latest",
-    "eslint": "^8.51.0",
-    "eslint-plugin-qwik": "^1.2.17",
-    "postcss": "^8.4.31",
-    "prettier": "^3.0.3",
-    "prettier-plugin-tailwindcss": "^0.5.4",
-    "tailwindcss": "3.3.3",
-    "typescript": "^5.2.2",
-    "undici": "^5.26.0",
-    "vite": "^4.4.11",
-    "vite-tsconfig-paths": "^4.2.1"
+    "@auth/core": "^0.13.0",
+    "@builder.io/qwik": "^1.4.0",
+    "@builder.io/qwik-auth": "0.1.1",
+    "@builder.io/qwik-city": "^1.4.0",
+    "@types/eslint": "^8.56.2",
+    "@types/node": "^20.11.5",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "autoprefixer": "^10.4.17",
+    "bun-types": "^1.0.23",
+    "daisyui": "^4.6.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-qwik": "^1.4.0",
+    "postcss": "^8.4.33",
+    "prettier": "^3.2.4",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3",
+    "undici": "^5.28.2",
+    "vite": "^5.0.12",
+    "vite-tsconfig-paths": "^4.3.1"
   },
-  "description": "qwik-daisyui-tailwind-init",
+  "description": "qwik-todo-daisyui-tailwind-mongodb",
   "engines": {
     "node": ">=15.0.0"
   },
@@ -30,6 +32,7 @@
     "build": "qwik build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
+    "build.server": "vite build -c adapters/bun/vite.config.ts",
     "build.types": "tsc --incremental --noEmit",
     "deploy": "echo 'Run \"npm run qwik add\" to install a server adapter'",
     "dev": "vite --mode ssr",
@@ -38,6 +41,7 @@
     "fmt.check": "prettier --check .",
     "lint": "eslint \"src/**/*.ts*\"",
     "preview": "qwik build preview && vite preview --open",
+    "serve": "bun server/entry.bun.js",
     "start": "vite --open --mode ssr",
     "qwik": "qwik"
   },
@@ -45,6 +49,16 @@
     "sharp"
   ],
   "dependencies": {
-    "uuidv4": "^6.2.13"
+    "@auth/mongodb-adapter": "^2.0.13",
+    "@modular-forms/qwik": "^0.21.2",
+    "@qwikest/icons": "^0.0.13",
+    "@unpic/qwik": "^0.0.36",
+    "mongodb": "^6.3.0",
+    "qwik-image": "^0.0.8",
+    "qwik-theme-toggle": "^1.0.9",
+    "qwik-toasts": "^0.0.7",
+    "typescript-cookie": "^1.0.6",
+    "uuidv4": "^6.2.13",
+    "valibot": "^0.26.0"
   }
 }
