@@ -4,7 +4,7 @@ import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { HeroAuth } from "~/components/page-auth/hero-auth";
 import { HeroDescription } from "~/components/page-auth/hero-description";
 
-// Check if user is logged in and needs to be redirected to the main page
+// Check if user is logged in already and needs to be redirected to the main page
 export const useCheckSession = routeLoader$(async (event) => {
   const session = event.sharedMap.get("session");
   if (session && session.expires > new Date().toISOString()) {

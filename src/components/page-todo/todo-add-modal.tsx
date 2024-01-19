@@ -1,5 +1,5 @@
 import type { Signal } from "@builder.io/qwik";
-import { component$, useContext, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, $, useContext, useVisibleTask$ } from "@builder.io/qwik";
 import type { ResponseData } from "@modular-forms/qwik";
 import {
   formAction$,
@@ -54,7 +54,7 @@ const useFormAction = formAction$<TodoAddForm, ResponseData>(
 
 export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
   const toastManager = useContext(ToastManagerContext);
-  const [TodoAddForm, { Form, Field }] = useForm<TodoAddForm, ResponseData>({
+  const [todoAddForm, { Form, Field }] = useForm<TodoAddForm, ResponseData>({
     loader: {
       value: {
         title: "",
@@ -64,31 +64,25 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
     validate: valiForm$(TodoAddSchema),
   });
 
+  const resetForm$ = $(() => {
+    toastManager.addToast({
+      message: todoAddForm.response.message!,
+      type: todoAddForm.response.status!,
+      autocloseTime: 5000,
+    });
+    setValue(todoAddForm, "title", "");
+    reset(todoAddForm);
+  });
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
-    track(() => TodoAddForm.response);
-    if (TodoAddForm.response.status === "success") {
-      refresh.value += 1;
-      toastManager.addToast({
-        message: TodoAddForm.response.message!,
-        type: TodoAddForm.response.status!,
-        autocloseTime: 5000,
-      });
-      const dialog = document.getElementById(
-        "addtodo_modal",
-      ) as HTMLDialogElement;
-      dialog.close();
-      setValue(TodoAddForm, "title", "");
-      reset(TodoAddForm);
-    } else if (TodoAddForm.response.status === "error") {
-      toastManager.addToast({
-        message: TodoAddForm.response.message!,
-        type: TodoAddForm.response.status!,
-        autocloseTime: 5000,
-      });
-      setValue(TodoAddForm, "title", "");
-      reset(TodoAddForm);
+    track(() => todoAddForm.response);
+    if (todoAddForm.response.status) {
+      refresh.value++;
+      resetForm$();
     }
+
+    console.log("refresh.value", refresh.value);
   });
 
   return (
@@ -117,24 +111,16 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
             )}
           </Field>
           <div class="card-actions justify-end pt-4">
-            {!TodoAddForm.submitting && (
-              <button
-                class="btn btn-outline btn-primary btn-sm"
-                type="submit"
-                disabled={TodoAddForm.submitting}
-              >
-                Save
-              </button>
-            )}
-            {TodoAddForm.submitting && (
-              <button
-                class="btn btn-disabled btn-outline btn-primary btn-sm"
-                type="button"
-              >
+            <button
+              class="btn btn-outline btn-primary btn-sm"
+              type="submit"
+              disabled={todoAddForm.submitting}
+            >
+              {todoAddForm.submitting && (
                 <span class="loading loading-spinner loading-sm"></span>
-                Saving...
-              </button>
-            )}
+              )}
+              {todoAddForm.submitting ? "Saving..." : "Save"}
+            </button>
           </div>
         </Form>
       </div>
