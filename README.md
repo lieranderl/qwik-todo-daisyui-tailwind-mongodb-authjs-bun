@@ -60,10 +60,6 @@ Start the server
 bun start
 ```
 
-## Test in action
-
-[Codesandbox](https://codesandbox.io/p/github/lieranderl/qwik-todo-daisyui-tailwind-mongodb-authjs-bun/main)
-
 ## Usage
 
 The application allows you to add, delete, update and mark tasks as done. User authentication is handled by AuthJS, sessions stored in MongoDB. The tasks are stored in MongoDB, enabling persistence across sessions. Bun is used as the HTTP server to handle requests and responses.
