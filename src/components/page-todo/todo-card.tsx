@@ -112,7 +112,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
   });
 
   return (
-    <div class="card card-bordered min-w-[400px] max-w-[500px] shadow-lg">
+    <div class="card card-bordered min-w-[395px] max-w-[500px] shadow-lg">
       <div class="card-body">
         <Form>
           <Field name="id" type="string">

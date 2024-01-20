@@ -44,7 +44,7 @@ export const TodoList = component$(() => {
       onPending={pendingHandler}
       onRejected={errorHandler}
       onResolved={(todoList) => (
-        <div class="mx-2 grid justify-items-center gap-4 sm:mx-40 lg:mx-24 lg:grid-cols-2 xl:mx-40 2xl:grid-cols-3">
+        <div class="mx-auto grid justify-items-center gap-4 sm:mx-40 lg:mx-24 lg:grid-cols-2 xl:mx-40 2xl:grid-cols-3">
           {todoList.map((todo) => {
             return (
               <TodoCard todo={todo} key={todo.id} refresh={refreshEvent} />
