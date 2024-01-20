@@ -42,7 +42,7 @@ const updateTodoAction = formAction$<TodoForm, ResponseData>(
       });
       return {
         status: "success",
-        message: "Todo added successfully.",
+        message: "Todo updated successfully.",
         data: { id: resp.id },
       };
     } catch (error) {

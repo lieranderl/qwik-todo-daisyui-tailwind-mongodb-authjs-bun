@@ -11,14 +11,15 @@ import { ObjectId } from "mongodb";
 
 export const addTodo = async (todo: TodoBody) => {
   todo.completed = false;
+  const currentDateTime = new Date();
   const fullTodo = {
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: currentDateTime,
+    updatedAt: currentDateTime,
     ...todo,
   };
   const res = await todosCol.insertOne(fullTodo);
   if (res.acknowledged) {
-    return { id: res.insertedId.toString() } as TodoId;
+    return { id: res.insertedId.toString() };
   }
   throw new Error("Todo not added");
 };
@@ -31,7 +32,7 @@ export const updateTodo = async ({ id, todo }: TodoBodyRecordProps) => {
   if (res.modifiedCount === 0) {
     throw new Error("Todo not found");
   }
-  return { id } as TodoId;
+  return { id };
 };
 
 export const deleteTodo = async ({ id }: TodoId) => {
@@ -39,7 +40,7 @@ export const deleteTodo = async ({ id }: TodoId) => {
   if (res.deletedCount === 0) {
     throw new Error("Todo not found");
   }
-  return { id } as TodoId;
+  return { id };
 };
 
 export const getTodoList = async ({ email }: TodoListBodyRecordProps) => {
