@@ -24,7 +24,7 @@ type TodoAddModalProps = {
   refresh: Signal<number>;
 };
 
-const useFormAction = formAction$<TodoAddForm, ResponseData>(
+const useFormAddAction = formAction$<TodoAddForm, ResponseData>(
   async (values, event) => {
     const session = event.sharedMap.get("session");
     if (!session) {
@@ -60,7 +60,7 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
         title: "",
       },
     },
-    action: useFormAction(),
+    action: useFormAddAction(),
     validate: valiForm$(TodoAddSchema),
   });
 
@@ -76,6 +76,7 @@ export const TodoAddModal = component$(({ refresh }: TodoAddModalProps) => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
+    // track todo form response and update refresh signal
     track(() => todoAddForm.response);
     if (todoAddForm.response.status) {
       refresh.value++;

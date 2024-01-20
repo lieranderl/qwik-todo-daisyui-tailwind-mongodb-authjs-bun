@@ -26,7 +26,7 @@ const TodoUpdateSchema = object({
 });
 type TodoForm = Input<typeof TodoUpdateSchema>;
 
-const useFormUpdateAction = formAction$<TodoForm, ResponseData>(
+const updateTodoAction = formAction$<TodoForm, ResponseData>(
   async (values, event) => {
     const session = event.sharedMap.get("session");
     if (!session) {
@@ -56,13 +56,19 @@ const useFormUpdateAction = formAction$<TodoForm, ResponseData>(
   valiForm$(TodoUpdateSchema),
 );
 
+const deleteTodoAction = server$(async (id: string) => {
+  await deleteTodo({
+    id: id,
+  });
+});
+
 export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
   const [TodoForm, { Form, Field }] = useForm<TodoForm, ResponseData>({
     loader: {
       value: { title: todo.title, completed: todo.completed, id: todo.id },
     },
     validate: valiForm$(TodoUpdateSchema),
-    action: useFormUpdateAction(),
+    action: updateTodoAction(),
   });
   const toastManager = useContext(ToastManagerContext);
   const isLoadingDelete = useSignal(false);
@@ -70,6 +76,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
+    // track todo form response and update refresh signal
     track(() => TodoForm.response);
     if (TodoForm.response.status) {
       refresh.value++;
@@ -81,16 +88,10 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
     }
   });
 
-  const deleleTodoOnServer$ = server$(async () => {
-    await deleteTodo({
-      id: todo.id,
-    });
-  });
-
-  const submitHandlerDelete$ = $(async () => {
+  const deleteHandler$ = $(async () => {
     isLoadingDelete.value = true;
     try {
-      await deleleTodoOnServer$();
+      await deleteTodoAction(todo.id);
       toastManager.addToast({
         message: "TODO deleted",
         type: "success",
@@ -106,7 +107,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
     }
   });
 
-  const handleInputChange$ = $(async () => {
+  const inputChangeHandler$ = $(async () => {
     disabledSavebutton.value = false;
   });
 
@@ -130,7 +131,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
                   placeholder="Type TODO title here"
                   type="text"
                   value={field.value}
-                  onClick$={handleInputChange$}
+                  onClick$={inputChangeHandler$}
                 />
                 {field.error && <div>{field.error}</div>}
               </div>
@@ -163,7 +164,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
                       type="checkbox"
                       class="peer checkbox-info checkbox checked:checkbox-success"
                       checked={field.value}
-                      onChange$={handleInputChange$}
+                      onChange$={inputChangeHandler$}
                     />
                     <span class="label-text mx-4 hidden text-success peer-checked:block">
                       Completed
@@ -201,7 +202,7 @@ export const TodoCard = component$<TodoCardProps>(({ todo, refresh }) => {
               <button
                 class="btn btn-outline btn-error btn-sm"
                 type="button"
-                onClick$={submitHandlerDelete$}
+                onClick$={deleteHandler$}
               >
                 Delete
               </button>
