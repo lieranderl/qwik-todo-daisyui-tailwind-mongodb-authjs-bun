@@ -8,7 +8,7 @@ export const LoginButtons = component$(() => {
       <LoginButton providerName="google">
         <SiGoogle></SiGoogle>
       </LoginButton>
-      <LoginButton providerName="github">
+      <LoginButton providerName="github" class="btn-disabled">
         <SiGithub></SiGithub>
       </LoginButton>
       <LoginButton providerName="facebook" class="btn-disabled">

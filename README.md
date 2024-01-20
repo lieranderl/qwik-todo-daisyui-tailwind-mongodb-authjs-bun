@@ -12,6 +12,9 @@ To get a local copy up and running, follow these simple steps.
 - Bun
 - MongoDB
 
+### Test in action
+[https://qwik-todo-uphjdpakeq-ew.a.run.app/](https://qwik-todo-uphjdpakeq-ew.a.run.app/)
+
 ### Installation
 
 Clone the repository
@@ -82,3 +85,11 @@ Contributions are what make the open-source community such an amazing place to l
 ## Contact
 
 Project Link: <https://github.com/lieranderl/qwik-todo-daisyui-tailwind-mongodb-authjs-bun>
+
+## Google Cloud Run Server
+
+This app has a minimal [Cloud Run server](https://cloud.google.com/run) implementation. After running a full build, deploy your app with:
+
+```
+bun deploy
+```
