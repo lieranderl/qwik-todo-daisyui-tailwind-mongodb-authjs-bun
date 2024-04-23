@@ -17,7 +17,7 @@ export const LoginButton = component$<LoginButtonProps>((props) => {
       onClick$={$(() => {
         signIn.submit({
           providerId: providerName,
-          options: { callbackUrl: "/" },
+          options: { callbackUrl: "/" }, // does not work https://github.com/QwikDev/qwik/issues/5227
         });
       })}
     >

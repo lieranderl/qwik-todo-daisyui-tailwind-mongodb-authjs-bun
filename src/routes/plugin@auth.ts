@@ -6,6 +6,7 @@ import mongoClientPromise from "../utils/mongodbinit";
 import type { GoogleProfile } from "@auth/core/providers/google";
 import Google from "@auth/core/providers/google";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import type { Adapter } from "@auth/core/adapters";
 
 export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
   serverAuth$(() => ({
@@ -14,7 +15,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
       maxAge: 60 * 60 * 24 * 7, // 1 week
       updateAge: 60 * 60 * 24, // 1 day
     },
-    adapter: MongoDBAdapter(mongoClientPromise, { databaseName: "testing" }),
+    adapter: MongoDBAdapter(mongoClientPromise, { databaseName: "testing" }) as Adapter,
     secret: process.env.AUTH_SECRET,
     trustHost: true,
     providers: [
