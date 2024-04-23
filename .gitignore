@@ -41,3 +41,7 @@ lerna-debug.log*
 !.yarn/releases
 .env.production
 .env.*
+
+# amplify
+.amplify
+amplifyconfiguration*
