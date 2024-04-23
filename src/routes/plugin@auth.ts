@@ -15,7 +15,9 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
       maxAge: 60 * 60 * 24 * 7, // 1 week
       updateAge: 60 * 60 * 24, // 1 day
     },
-    adapter: MongoDBAdapter(mongoClientPromise, { databaseName: "testing" }) as Adapter,
+    adapter: MongoDBAdapter(mongoClientPromise, {
+      databaseName: "testing",
+    }) as Adapter,
     secret: process.env.AUTH_SECRET,
     trustHost: true,
     providers: [
