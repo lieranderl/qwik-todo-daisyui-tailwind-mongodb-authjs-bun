@@ -1,6 +1,6 @@
 import type { QwikIntrinsicElements } from "@builder.io/qwik";
 import { $, Slot, component$ } from "@builder.io/qwik";
-import { useAuthSignin } from "~/routes/plugin@auth";
+import { useSignIn } from "~/routes/plugin@auth";
 
 export type LoginButtonProps = QwikIntrinsicElements["button"] & {
   providerName: string;
@@ -10,18 +10,18 @@ export const LoginButton = component$<LoginButtonProps>((props) => {
   const loginBtnClass = "btn btn-secondary justify-start ";
   const fullClass = props.class ? loginBtnClass + props.class : loginBtnClass;
   const providerName = props.providerName || "google";
-  const signIn = useAuthSignin();
+  const signIn = useSignIn();
   return (
     <button
       class={fullClass}
       onClick$={$(() => {
         signIn.submit({
           providerId: providerName,
-          options: { callbackUrl: "/" }, // does not work https://github.com/QwikDev/qwik/issues/5227
+          redirectTo: "/",
         });
       })}
     >
-      <div class="flex items-start items-center gap-2 ">
+      <div class="flex items-start items-center gap-2">
         <div class="text-2xl">
           <Slot></Slot>
         </div>

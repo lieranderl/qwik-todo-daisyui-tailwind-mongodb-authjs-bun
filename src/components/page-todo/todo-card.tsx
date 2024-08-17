@@ -9,7 +9,14 @@ import {
 import type { ResponseData } from "@modular-forms/qwik";
 import { formAction$, getValue, useForm, valiForm$ } from "@modular-forms/qwik";
 import type { Todo } from "~/models/todo";
-import { type Input, minLength, object, string, boolean } from "valibot";
+import {
+  type InferInput,
+  minLength,
+  object,
+  string,
+  boolean,
+  pipe,
+} from "valibot";
 import { deleteTodo, updateTodo } from "~/utils/todomongodb";
 import { server$ } from "@builder.io/qwik-city";
 import { ToastManagerContext } from "qwik-toasts";
@@ -20,11 +27,11 @@ type TodoCardProps = {
 };
 
 const TodoUpdateSchema = object({
-  title: string([minLength(1, "Please enter TODO title.")]),
+  title: pipe(string(), minLength(1, "Please enter TODO title.")),
   completed: boolean(),
   id: string(),
 });
-type TodoForm = Input<typeof TodoUpdateSchema>;
+type TodoForm = InferInput<typeof TodoUpdateSchema>;
 
 const updateTodoAction = formAction$<TodoForm, ResponseData>(
   async (values, event) => {

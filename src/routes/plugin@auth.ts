@@ -1,5 +1,5 @@
-import { serverAuth$ } from "@builder.io/qwik-auth";
 import GitHub from "@auth/core/providers/github";
+import { QwikAuth$ } from "@auth/qwik";
 import Facebook from "@auth/core/providers/facebook";
 import type { Provider } from "@auth/core/providers";
 import mongoClientPromise from "../utils/mongodbinit";
@@ -8,8 +8,8 @@ import Google from "@auth/core/providers/google";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import type { Adapter } from "@auth/core/adapters";
 
-export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
-  serverAuth$(() => ({
+export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
+  () => ({
     session: {
       strategy: "database",
       maxAge: 60 * 60 * 24 * 7, // 1 week
@@ -84,7 +84,8 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
         return false;
       },
     },
-  }));
+  }),
+);
 
 declare module "@auth/core/types" {
   interface Session {

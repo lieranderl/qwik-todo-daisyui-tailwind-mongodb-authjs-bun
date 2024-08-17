@@ -1,10 +1,10 @@
 import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
-import { useAuthSession, useAuthSignout } from "~/routes/plugin@auth";
+import { useSession, useSignOut } from "~/routes/plugin@auth";
 
 export const AvatarMenu = component$(() => {
-  const session = useAuthSession();
-  const signOut = useAuthSignout();
+  const session = useSession();
+  const signOut = useSignOut();
   return (
     <>
       {session.value && session.value.user && (
@@ -30,7 +30,7 @@ export const AvatarMenu = component$(() => {
               <Link>Settings</Link>
             </li>
             <li>
-              <div onClick$={() => signOut.submit({ callbackUrl: "/auth" })}>
+              <div onClick$={() => signOut.submit({ redirectTo: "/auth" })}>
                 Logout
               </div>
             </li>

@@ -6,19 +6,19 @@ import {
   reset,
   setValue,
   useForm,
-  valiForm$,
+  valiForm$
 } from "@modular-forms/qwik";
-import type { Input } from "valibot";
-import { object, string, minLength } from "valibot";
+import type { InferInput } from "valibot";
+import { object, string, minLength, pipe } from "valibot";
 import { addTodo } from "~/utils/todomongodb";
 import type { TodoBody } from "~/models/todo";
 import { ToastManagerContext } from "qwik-toasts";
 
 const TodoAddSchema = object({
-  title: string([minLength(1, "Please enter TODO title.")]),
+  title: pipe(string(), minLength(1, "Please enter TODO title."))
 });
 
-type TodoAddForm = Input<typeof TodoAddSchema>;
+type TodoAddForm = InferInput<typeof TodoAddSchema>;
 
 type TodoAddModalProps = {
   refresh: Signal<number>;

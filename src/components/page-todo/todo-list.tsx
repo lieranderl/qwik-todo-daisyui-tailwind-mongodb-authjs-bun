@@ -7,7 +7,7 @@ import {
 import { TodoCard } from "./todo-card";
 import { TodoAddModal } from "./todo-add-modal";
 import { getTodoList } from "~/utils/todomongodb";
-import { useAuthSession } from "~/routes/plugin@auth";
+import { useSession } from "~/routes/plugin@auth";
 import { server$ } from "@builder.io/qwik-city";
 import { pendingHandler, errorHandler } from "~/utils/resource-handlers";
 
@@ -28,7 +28,7 @@ const getTodoFromServer = server$(async (email: string) => {
 
 export const TodoList = component$(() => {
   const refreshEvent = useSignal(0);
-  const session = useAuthSession();
+  const session = useSession();
 
   const resource = useResource$(async ({ track }) => {
     track(() => refreshEvent.value);
